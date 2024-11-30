@@ -2,26 +2,40 @@ import {defineStore} from "pinia";
 
 const equipes = [
   {
-    id : 1,
+    id: 1,
     name: "Equipe 1",
-    score: 5
   },
   {
-    id : 2,
+    id: 2,
     name: "Equipe 2",
-    score: 1
-  }
-];
-
-const matchs = [
-  {
-    id: 1,
-    equipe1: 1,
-    equipe2: 2,
-    score1: 0,
-    score2: 0
   }
 ]
+
+const jeuxVideos = [
+  {
+    id: 1,
+    name: "Rocket league"
+  },
+  {
+    id: 2,
+    name: "call of duty"
+  }
+]
+
+const matchs = [{
+  id: 1,
+  jeu: "",
+  equipes : [
+    {
+      "equipe": 1,
+      "score": 0,
+    },
+    {
+      "equipe": 2,
+      "score": 0,
+    }
+  ]
+}]
 
 export const useScoreStore = defineStore('scoreStore', {
   state: () => ({
@@ -42,11 +56,5 @@ export const useScoreStore = defineStore('scoreStore', {
     selectedEquipe(id) {
       return this.equipes.find(equipe => equipe.id === id)
     },
-    addScore(score) {
-      this.score += score
-    },
-    resetScore() {
-      this.score = 0
-    }
   }
 })
