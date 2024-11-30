@@ -25,13 +25,13 @@ const jeuxVideos = [
 const matchs = [{
   id: 1,
   jeu: "",
-  equipes : [
+  equipes: [
     {
-      "equipe": 1,
+      "id": 1,
       "score": 0,
     },
     {
-      "equipe": 2,
+      "id": 2,
       "score": 0,
     }
   ]
@@ -56,5 +56,35 @@ export const useScoreStore = defineStore('scoreStore', {
     selectedEquipe(id) {
       return this.equipes.find(equipe => equipe.id === id)
     },
+
+    /**
+     * obtenir le nombre de points
+     * @param id de l'équipe
+     */
+    getPoints(id) {
+      let nbPoints = 0
+
+      // teste si l'id existe
+      if (equipes.find(equipe => equipe.id === id)) {
+
+        // chercher les matchs dont l'équipe en id joue
+        let filteredMatchs = matchs.filter(match => match.equipes.some(equipe => equipe.id === id))
+
+        for (let match of filteredMatchs) {
+          // Recherche de l'index de l'équipe dans le match
+          let indexEquipe = match.equipes.findIndex(equipe => equipe.id === id)
+          console.log("index de l'équipe : " + indexEquipe)
+          if (indexEquipe !== -1) {
+            if (match.equipes[indexEquipe].score > match.equipes[!indexEquipe].score) {
+              nbPoints += 3
+            } else if (match.equipes[indexEquipe].score === match.equipes[indexEquipe].score) {
+              nbPoints += 1
+            }
+          }
+        }
+      } else {
+        return -1
+      }
+    }
   }
 })
