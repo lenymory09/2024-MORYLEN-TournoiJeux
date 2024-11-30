@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <app-header />
-    <v-main class="mr-auto ml-auto">
+    <v-main width="1000px" class="mr-auto ml-auto">
       <router-view />
     </v-main>
   <app-footer />
@@ -14,6 +14,9 @@
 
 </script>
 
-<style>
-
+<style lang="sass">
+h1
+  margin-top: 30px
+  margin-bottom: 30px
+  font-size: 3rem
 </style>

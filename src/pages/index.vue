@@ -1,10 +1,13 @@
 <template>
   <h1>Classemement des équipes</h1>
-  <ol>
-    <li v-for="equipe in getEquipesSortedByScore" :key="equipe.id">
-      {{ equipe.name }} : {{ scoreStore.getPoints(equipe.id) }} points.
-    </li>
-  </ol>
+    <v-list lines="two">
+      <v-list-item
+        class="mb-5"
+        v-for="equipe in getEquipesSortedByScore"
+        :key="equipe.id"
+        :title="equipe.name + ' - ' + scoreStore.getPoints(equipe.id)"
+     />
+    </v-list>
 </template>
 
 <script setup>
@@ -13,4 +16,11 @@
 
   const scoreStore = useScoreStore()
   const { getEquipesSortedByScore } = scoreStore
+  const equipes = computed(() => getEquipesSortedByScore)
 </script>
+
+<style>
+.element-list {
+  font-size: 3rem;
+}
+</style>
