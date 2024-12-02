@@ -41,11 +41,11 @@ const matchs = [
     jeu: 1,
     equipes: [
       {
-        "id": 1,
+        "name": "Equipe 1",
         "score": 1,
       },
       {
-        "id": 2,
+        "name": "Equipe 2",
         "score": 0,
       }
     ]
@@ -55,155 +55,15 @@ const matchs = [
     jeu: 1,
     equipes: [
       {
-        "id": 1,
+        "name": "Equipe 2",
         "score": 1,
       },
       {
-        "id": 3,
+        "name": "Equipe 3",
         "score": 1,
       }
     ]
   },
-  {
-    id: 3,
-    jeu: 1,
-    equipes: [
-      {
-        "id": 1,
-        "score": 1,
-      },
-      {
-        "id": 4,
-        "score": 2,
-      }
-    ]
-  },
-  {
-    id: 4,
-    jeu: 1,
-    equipes: [
-      {
-        "id": 1,
-        "score": 1,
-      },
-      {
-        "id": 5,
-        "score": 3,
-      }
-    ]
-  },
-  {
-    id: 5,
-    jeu: 1,
-    equipes: [
-      {
-        "id": 2,
-        "score": 1,
-      },
-      {
-        "id": 3,
-        "score": 1,
-      }
-    ]
-  },
-  {
-    id: 6,
-    jeu: 1,
-    equipes: [
-      {
-        "id": 2,
-        "score": 1,
-      },
-      {
-        "id": 4,
-        "score": 2,
-      }
-    ]
-  },
-  {
-    id: 7,
-    jeu: 1,
-    equipes: [
-      {
-        "id": 2,
-        "score": 1,
-      },
-      {
-        "id": 5,
-        "score": 3,
-      }
-    ]
-  },
-  {
-    id: 8,
-    jeu: 1,
-    equipes: [
-      {
-        "id": 3,
-        "score": 1,
-      },
-      {
-        "id": 4,
-        "score": 2,
-      }
-    ]
-  },
-  {
-    id: 9,
-    jeu: 1,
-    equipes: [
-      {
-        "id": 3,
-        "score": 1,
-      },
-      {
-        "id": 5,
-        "score": 3,
-      }
-    ]
-  },
-  {
-    id: 10,
-    jeu: 1,
-    equipes: [
-      {
-        "id": 4,
-        "score": 1,
-      },
-      {
-        "id": 5,
-        "score": 3,
-      }
-    ]
-  },
-  {
-    id: 11,
-    jeu: 2,
-    equipes: [
-      {
-        "id": 1,
-        "score": 1,
-      },
-      {
-        "id": 2,
-        "score": 0,
-      }
-    ]
-  },
-  {
-    id: 12,
-    jeu: 2,
-    equipes: [
-      {
-        "id": 1,
-        "score": 1,
-      },
-      {
-        "id": 3,
-        "score": 1,
-      }
-    ]
-  }
 ]
 
 export const useScoreStore = defineStore('scoreStore', {
@@ -227,8 +87,8 @@ export const useScoreStore = defineStore('scoreStore', {
   },
   actions: {
     /**
-     * sélecte une équipe par rapport à son id
-     * @param id {number}
+     * retourne l'équipe dont l'id est celui en paramètre
+     * @param id {number} de l'équipe
      */
     selectEquipe(id) {
       this.selectedEquipe = this.equipes.find(equipe => equipe.id === id)
@@ -303,29 +163,39 @@ export const useScoreStore = defineStore('scoreStore', {
       return {success: true, message: "L'équipe a été ajoutée avec succès"}
     },
 
+    /**
+     * ajoute un match
+     * @param match à ajouter
+     * @returns {{success: boolean, message: string}} retourne un message de succès ou d'erreur
+     */
     addMatch(match) {
+
+      // teste si le jeu existe
       this.selectJeu(match.jeu)
       if (!this.selectedJeu){
         return {success: false, message: "Le jeu n'existe pas"}
       }
 
-      for (let index = 0; index < 2; index++) {
-        // teste si les équipes existent
-        this.selectEquipe(match.equipes[index].id)
-        if (!this.selectedEquipe) {
-          return {success: false, message: `\`L'équipe ${index + 1} n'existe pas.`}
+      // teste si les équipes et les scores sont corrects
+      for (let equipe of match.equipes) {
+        // teste si l'équipe a été trouvé
+        let equipeCourrante = this.equipes.find(equipeItem => equipeItem.name.toLowerCase() === equipe.name.toLowerCase())
+        if (!equipeCourrante) {
+          return { success: false, message: `${equipe.name} n'existe pas.` }
         }
 
         // teste que les scores ne soit pas plus petit que 0
-        if (match.equipes[index].score < 0) {
-          return {success: false, message: `\`Le score ${index + 1} ne peut pas etre plus petit que 0.\``}
+        if (equipe.score < 0) {
+          return {success: false, message: `Le score de l'équipe ${equipe.name} ne peut pas etre plus petit que 0.`}
         }
       }
 
+      // teste si les équipes sont différentes
       if (match.equipes[0].id === match.equipes[1].id){
-        return {success: false, message: "Les équipes qui s'affrontent ne peuvent pas être les mêmes."}
+        return { success: false, message: "Les équipes qui s'affrontent ne peuvent pas être les mêmes." }
       }
 
+      // si tout est bon on ajoute le match
       this.matchs.push(match)
       return { success: true, message: "Le match a été ajouté avec succès."}
     }

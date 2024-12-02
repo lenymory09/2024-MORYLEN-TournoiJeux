@@ -9,13 +9,13 @@ const scoreStore = useScoreStore()
 
 const { equipes, jeuxVideos } = storeToRefs(scoreStore)
 
-const response = ref(null)
+const reponse = ref(null)
 
 const match = ref({
-  name: "",
+  jeu: "",
   equipes: [
-    { id: 0, score: 0},
-    { id: 0, score: 0}
+    { name: "", score: 0},
+    { name: "", score: 0}
   ]
 })
 
@@ -27,21 +27,24 @@ function addMatch() {
   const inputEquipe1 = document.querySelector("#input-equipe-1")
   const inputEquipe2 = document.querySelector("#input-equipe-2")
 
-  match.value.equipes[0].id = inputEquipe1.value
-  match.value.equipes[1].id = inputEquipe2.value
+  match.value.equipes[0].name = inputEquipe1.value
+  match.value.equipes[1].name = inputEquipe2.value
 
-  response.value = scoreStore.addMatch(match.value)
+  console.log(JSON.stringify(match.value))
 
-  if (response.value.success) {
+  reponse.value = scoreStore.addMatch(match.value)
+
+  if (reponse.value.success) {
     // Réinitialisation des données après succès
-    response.value = null
+    reponse.value = null
     match.value = {
-      name: "",
+      jeu: "",
       equipes: [
-        { id: 0, score: 0},
-        { id: 0, score: 0}
-      ]
-    }
+        { name: "", score: 0},
+        { name: "", score: 0}
+      ]}
+
+    // Redirection vers la page d'accueil
     router.push("/")
   }
 }
@@ -52,29 +55,34 @@ function addMatch() {
 
   <v-form @submit.prevent="addMatch">
     <!-- Saisie du jeu -->
-    <select v-model="match.jeu">
-      <option v-for="jeu in jeuxVideos" :value="jeu.id">{{ jeu.name }}</option>
-    </select>
+    <v-radio-group v-model="match.jeu">
+      <v-radio v-for="jeu in jeuxVideos" :label="jeu.name" :value="jeu.id" />
+    </v-radio-group>
+
 
     <!-- TODO création d'une input de séléction d'équipes -->
     <select id="input-equipe-1">
-      <option v-for="equipe in equipes" :value="equipe.id">{{ equipe.name }}</option>
+      <option v-for="equipe in equipes" :value="equipe.name">{{ equipe.name }}</option>
     </select>
 
-
+    <!-- Saisie du score --> <!-- todo changer en fonction des jeux choisis -->
+    <v-text-field :rules="rules" label="Score" v-model.number="match.equipes[0].score" />
 
     <select id="input-equipe-2">
-      <option v-for="equipe in equipes" :value="equipe.id">{{ equipe.name }}</option>
+      <option v-for="equipe in equipes" :value="equipe.name">{{ equipe.name }}</option>
     </select>
 
+    <!-- Saisie du score --> <!-- todo changer en fonction des jeux choisis -->
+    <v-text-field :rules="rules" label="Score" v-model.number="match.equipes[1].score" />
+
     <v-alert
-      v-if="response"
+      v-if="reponse"
       border="top"
       type="warning"
       variant="outlined"
       prominent
     >
-      {{ response.message }}
+      {{ reponse.message }}
     </v-alert>
     <v-btn type="submit">Ajouter</v-btn>
   </v-form>
