@@ -23,7 +23,7 @@ import { ref } from "vue"
 <template>
   <h1>Ajouter une équipe</h1>
   <v-form @submit.prevent="addEquipe">
-    <v-text-field label="Nom de l'équipe" v-model.trim="equipe.name" />
+    <v-text-field :rules="rules" label="Nom de l'équipe" v-model.trim="equipe.name" />
     <v-alert
       v-if="response"
       border="top"

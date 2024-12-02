@@ -210,7 +210,10 @@ export const useScoreStore = defineStore('scoreStore', {
   state: () => ({
     equipes,
     matchs,
-    jeuxVideos
+    jeuxVideos,
+    selectedJeu: {},
+    selectedMatch: {},
+    selectedEquipe: {},
   }),
   getters: {
     /**
@@ -227,8 +230,28 @@ export const useScoreStore = defineStore('scoreStore', {
      * sélecte une équipe par rapport à son id
      * @param id {number}
      */
-    selectedEquipe(id) {
-      return this.equipes.find(equipe => equipe.id === id)
+    selectEquipe(id) {
+      this.selectedEquipe = this.equipes.find(equipe => equipe.id === id)
+    },
+
+    // todo : créer une action pour charger les données depuis une api
+
+    /**
+     * retourne le match dont l'id est celui en paramètre
+     * @param id du match
+     * @returns {{equipes: [{score: number, id: number},{score: number, id: number}], id: number, jeu: number}}
+     */
+    selectMatch(id) {
+      this.selectedMatch = this.matchs.find(match => match.id === id)
+    },
+
+    /**
+     * retourne le jeu passé en parametre
+     * @param id du jeu
+     * @returns {{name: string, id: number} | {name: string, id: number}}
+     */
+    selectJeu(id) {
+      this.selectedJeu = this.jeuxVideos.find(jeu => jeu.id === id)
     },
 
     /**
@@ -278,6 +301,33 @@ export const useScoreStore = defineStore('scoreStore', {
       equipe.id = this.equipes[this.equipes.length - 1].id + 1
       this.equipes.push(equipe)
       return {success: true, message: "L'équipe a été ajoutée avec succès"}
+    },
+
+    addMatch(match) {
+      this.selectJeu(match.jeu)
+      if (!this.selectedJeu){
+        return {success: false, message: "Le jeu n'existe pas"}
+      }
+
+      for (let index = 0; index < 2; index++) {
+        // teste si les équipes existent
+        this.selectEquipe(match.equipes[index].id)
+        if (!this.selectedEquipe) {
+          return {success: false, message: `\`L'équipe ${index + 1} n'existe pas.`}
+        }
+
+        // teste que les scores ne soit pas plus petit que 0
+        if (match.equipes[index].score < 0) {
+          return {success: false, message: `\`Le score ${index + 1} ne peut pas etre plus petit que 0.\``}
+        }
+      }
+
+      if (match.equipes[0].id === match.equipes[1].id){
+        return {success: false, message: "Les équipes qui s'affrontent ne peuvent pas être les mêmes."}
+      }
+
+      this.matchs.push(match)
+      return { success: true, message: "Le match a été ajouté avec succès."}
     }
   }
 })

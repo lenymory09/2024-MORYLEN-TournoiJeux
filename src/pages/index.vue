@@ -13,11 +13,29 @@
 
 <script setup>
   import { useScoreStore } from "@/stores/scoreStore"
-  import { computed } from "vue"
+  import { computed, onMounted } from "vue"
 
   const scoreStore = useScoreStore()
   const { getEquipesSortedByScore } = scoreStore
   const equipes = computed(() => getEquipesSortedByScore)
+
+  onMounted(() => {
+    console.log(scoreStore.addMatch({
+      id: 4,
+      jeu: 1,
+      equipes: [
+        {
+          "id": 1,
+          "score": 1,
+        },
+        {
+          "id": 2,
+          "score": 3,
+        }
+      ]
+    })
+    )
+  })
 </script>
 
 <style>
