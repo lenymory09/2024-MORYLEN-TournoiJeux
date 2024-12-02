@@ -5,8 +5,9 @@
         class="mb-5"
         v-for="equipe in getEquipesSortedByScore"
         :key="equipe.id"
-        :title="equipe.name + ' - ' + scoreStore.getPoints(equipe.id)"
-     />
+     >
+        <v-list-item-title>{{ equipe.name }} - {{ scoreStore.getPoints(equipe.id) }}</v-list-item-title>
+      </v-list-item>
     </v-list>
 </template>
 
@@ -20,7 +21,4 @@
 </script>
 
 <style>
-.element-list {
-  font-size: 3rem;
-}
 </style>
