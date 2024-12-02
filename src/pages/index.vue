@@ -6,14 +6,14 @@
         v-for="equipe in getEquipesSortedByScore"
         :key="equipe.id"
      >
-        <v-list-item-title>{{ equipe.name }} - {{ scoreStore.getPoints(equipe.id) }}</v-list-item-title>
+        <v-list-item-title>{{ equipe.name }} - {{ scoreStore.getPoints(equipe.id) }} - {{ equipe.id }}</v-list-item-title>
       </v-list-item>
     </v-list>
 </template>
 
 <script setup>
   import { useScoreStore } from "@/stores/scoreStore"
-  import { computed } from "vue";
+  import { computed } from "vue"
 
   const scoreStore = useScoreStore()
   const { getEquipesSortedByScore } = scoreStore

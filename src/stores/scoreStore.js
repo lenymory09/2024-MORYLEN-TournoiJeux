@@ -1,4 +1,5 @@
 import {defineStore} from "pinia";
+import router from "@/router";
 
 const equipes = [
   {
@@ -263,6 +264,20 @@ export const useScoreStore = defineStore('scoreStore', {
         return -1
       }
       return nbPoints
+    },
+
+    /**
+     * ajoute une équipe
+     * @param equipe {Object}
+     * @returns {{success: boolean, message: string}} retourne un message de succès ou d'erreur
+     */
+    addEquipe(equipe) {
+      if (!equipe.name) {
+        return {success: false, message: "Le nom ne peut pas être vide"}
+      }
+      equipe.id = this.equipes[this.equipes.length - 1].id + 1
+      this.equipes.push(equipe)
+      return {success: true, message: "L'équipe a été ajoutée avec succès"}
     }
   }
 })
