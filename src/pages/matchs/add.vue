@@ -25,15 +25,6 @@ const rules = [
 ]
 
 function addMatch() {
-  // prend les input du dom
-  const pInputEquipe1 = ref(null)
-  const pInputEquipe2 = ref(null)
-
-  console.log(getNomsEquipes)
-
-  // match.value.equipes[0].name = pInputEquipe1.value
-  // match.value.equipes[1].name = pInputEquipe2.value
-
   console.log(JSON.stringify(match.value))
 
   reponse.value = scoreStore.addMatch(match.value)
@@ -63,8 +54,6 @@ function addMatch() {
       <v-radio v-for="jeu in jeuxVideos" :label="jeu.name" :value="jeu.id" />
     </v-radio-group>
 
-
-    <!-- TODO création d'une input de séléction d'équipes -->
     <v-combobox
       v-model="match.equipes[0].name"
       :items="getNomsEquipes"
