@@ -83,7 +83,19 @@ export const useScoreStore = defineStore('scoreStore', {
       return state.equipes
         .slice()
         .sort((a, b) => this.getPoints(b.id) - this.getPoints(a.id)); // Utilise this pour appeler l'action
-    }
+    },
+
+    /**
+     * @param state du magasin
+     * @returns {*[]} la liste des noms des équipes
+     */
+    getNomsEquipes(state){
+      let listeNoms = []
+      for (let equipe of state.equipes){
+        listeNoms.push(equipe.name)
+      }
+      return listeNoms
+    },
   },
   actions: {
     /**
@@ -169,20 +181,10 @@ export const useScoreStore = defineStore('scoreStore', {
      * @returns {{success: boolean, message: string}} retourne un message de succès ou d'erreur
      */
     addMatch(match) {
-
-      // teste si le jeu existe
-      this.selectJeu(match.jeu)
-      if (!this.selectedJeu){
-        return {success: false, message: "Le jeu n'existe pas"}
-      }
-
       // teste si les équipes et les scores sont corrects
       for (let equipe of match.equipes) {
         // teste si l'équipe a été trouvé
-        let equipeCourrante = this.equipes.find(equipeItem => equipeItem.name.toLowerCase() === equipe.name.toLowerCase())
-        if (!equipeCourrante) {
-          return { success: false, message: `${equipe.name} n'existe pas.` }
-        }
+        let equipeCourrante = this.equipes.find(equipeItem => equipeItem.name === equipe.name)
 
         // teste que les scores ne soit pas plus petit que 0
         if (equipe.score < 0) {
@@ -191,7 +193,7 @@ export const useScoreStore = defineStore('scoreStore', {
       }
 
       // teste si les équipes sont différentes
-      if (match.equipes[0].id === match.equipes[1].id){
+      if (match.equipes[0].name === match.equipes[1].name){
         return { success: false, message: "Les équipes qui s'affrontent ne peuvent pas être les mêmes." }
       }
 

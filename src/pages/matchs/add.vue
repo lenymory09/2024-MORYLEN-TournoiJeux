@@ -1,6 +1,6 @@
 <script setup>
 // Importattion des fonctions et variables nécessaires
-import { ref } from "vue"
+import {ref, useTemplateRef} from "vue"
 import { useScoreStore } from "@/stores/scoreStore"
 import router from "@/router";
 import { storeToRefs } from "pinia";
@@ -8,6 +8,7 @@ import { storeToRefs } from "pinia";
 const scoreStore = useScoreStore()
 
 const { equipes, jeuxVideos } = storeToRefs(scoreStore)
+const { getNomsEquipes } = scoreStore
 
 const reponse = ref(null)
 
@@ -24,11 +25,14 @@ const rules = [
 ]
 
 function addMatch() {
-  const inputEquipe1 = document.querySelector("#input-equipe-1")
-  const inputEquipe2 = document.querySelector("#input-equipe-2")
+  // prend les input du dom
+  const pInputEquipe1 = ref(null)
+  const pInputEquipe2 = ref(null)
 
-  match.value.equipes[0].name = inputEquipe1.value
-  match.value.equipes[1].name = inputEquipe2.value
+  console.log(getNomsEquipes)
+
+  // match.value.equipes[0].name = pInputEquipe1.value
+  // match.value.equipes[1].name = pInputEquipe2.value
 
   console.log(JSON.stringify(match.value))
 
@@ -61,16 +65,20 @@ function addMatch() {
 
 
     <!-- TODO création d'une input de séléction d'équipes -->
-    <select id="input-equipe-1">
-      <option v-for="equipe in equipes" :value="equipe.name">{{ equipe.name }}</option>
-    </select>
+    <v-combobox
+      v-model="match.equipes[0].name"
+      :items="getNomsEquipes"
+      label="Nom de l'équipe 1"
+    />
 
     <!-- Saisie du score --> <!-- todo changer en fonction des jeux choisis -->
     <v-text-field :rules="rules" label="Score" v-model.number="match.equipes[0].score" />
 
-    <select id="input-equipe-2">
-      <option v-for="equipe in equipes" :value="equipe.name">{{ equipe.name }}</option>
-    </select>
+    <v-combobox
+      v-model="match.equipes[1].name"
+      :items="getNomsEquipes"
+      label="Nom de l'équipe 2"
+    />
 
     <!-- Saisie du score --> <!-- todo changer en fonction des jeux choisis -->
     <v-text-field :rules="rules" label="Score" v-model.number="match.equipes[1].score" />
@@ -90,8 +98,8 @@ function addMatch() {
 
 
 <style scoped lang="sass">
-  #input-equipe-1,
-  #input-equipe-2
+  .input-equipe-1,
+  .input-equipe-2
     padding: 5px
     background-color: #333
 </style>
