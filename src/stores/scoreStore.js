@@ -89,9 +89,9 @@ export const useScoreStore = defineStore('scoreStore', {
      * @param state du magasin
      * @returns {*[]} la liste des noms des équipes
      */
-    getNomsEquipes(state){
+    getNomsEquipes(state) {
       let listeNoms = []
-      for (let equipe of state.equipes){
+      for (let equipe of state.equipes) {
         listeNoms.push(equipe.name)
       }
       return listeNoms
@@ -102,8 +102,15 @@ export const useScoreStore = defineStore('scoreStore', {
      * retourne l'équipe dont l'id est celui en paramètre
      * @param id {number} de l'équipe
      */
-    selectEquipe(id) {
-      this.selectedEquipe = this.equipes.find(equipe => equipe.id === id)
+    selectEquipeById(id) {
+      const equipeCourrante = this.equipes.find(equipe => equipe.id === id)
+      if (equipeCourrante) {
+        this.selectedEquipe = equipe
+        return true
+      } else {
+        this.selectedEquipe = null
+        return false
+      }
     },
 
     // todo : créer une action pour charger les données depuis une api
@@ -134,14 +141,15 @@ export const useScoreStore = defineStore('scoreStore', {
       let nbPoints = 0
 
       // teste si l'id existe
-      if (this.equipes.find(equipe => equipe.id === id)) {
+      let equipeCourrant = this.equipes.find(equipe => equipe.id === id)
+      if (equipeCourrant) {
 
         // chercher les matchs dont l'équipe en id joue
-        let filteredMatchs = this.matchs.filter(match => match.equipes.some(equipe => equipe.id === id))
+        let filteredMatchs = this.matchs.filter(match => match.equipes.some(equipeEl => equipeEl.name.toLowerCase() === equipeCourrant.name.toLowerCase()))
 
         for (let match of filteredMatchs) {
           // Recherche de l'index de l'équipe dans le match
-          let indexEquipe = match.equipes.findIndex(equipe => equipe.id === id)
+          let indexEquipe = match.equipes.findIndex(equipe => equipe.name === equipeCourrant.name)
           console.log("index de l'équipe : " + indexEquipe)
           if (indexEquipe !== -1) { // si l'équipe est trouvée
 
@@ -193,13 +201,14 @@ export const useScoreStore = defineStore('scoreStore', {
       }
 
       // teste si les équipes sont différentes
-      if (match.equipes[0].name === match.equipes[1].name){
-        return { success: false, message: "Les équipes qui s'affrontent ne peuvent pas être les mêmes." }
+      if (match.equipes[0].name === match.equipes[1].name) {
+        return {success: false, message: "Les équipes qui s'affrontent ne peuvent pas être les mêmes."}
       }
 
       // si tout est bon on ajoute le match
+      match.id = this.matchs[this.matchs.length - 1].id + 1
       this.matchs.push(match)
-      return { success: true, message: "Le match a été ajouté avec succès."}
-    }
+      return {success: true, message: "Le match a été ajouté avec succès."}
+    },
   }
 })
