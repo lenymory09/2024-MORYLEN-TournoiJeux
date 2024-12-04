@@ -14,7 +14,8 @@ const { matchs, jeuxVideos } = storeToRefs(scoreStore)
       v-for="match in matchs"
       :key="match.id"
     >
-      <v-list-item-title><v-btn :to="`/matchs/${match.id}`" class="pa-5">{{ jeuxVideos.find(jeu => jeu.id === match.jeu).name }} - {{ match.equipes[0].name }} - {{ match.equipes[1].name }}</v-btn></v-list-item-title>
+      <v-list-item-title><v-btn :to="`/matchs/${match.id}`" class="pa-5">{{ jeuxVideos.find(jeu => jeu.id === match.jeu).name }} -
+        {{ match.equipes[0].name }} : {{ match.equipes[0].score }} - {{ match.equipes[1].name }} : {{ match.equipes[1].score }}</v-btn></v-list-item-title>
     </v-list-item>
   </v-list>
 </template>

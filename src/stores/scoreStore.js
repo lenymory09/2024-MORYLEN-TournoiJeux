@@ -1,5 +1,4 @@
 import {defineStore} from "pinia";
-import router from "@/router";
 
 const equipes = [
   {
@@ -120,8 +119,15 @@ export const useScoreStore = defineStore('scoreStore', {
      * @param id du match
      * @returns {{equipes: [{score: number, id: number},{score: number, id: number}], id: number, jeu: number}}
      */
-    selectMatch(id) {
-      this.selectedMatch = this.matchs.find(match => match.id === id)
+    selectMatchById(id) {
+      const matchCourrant = this.matchs.find(match => match.id === id)
+      if (matchCourrant) {
+        this.selectedMatch = matchCourrant
+        return true
+      } else {
+        this.selectedMatch = null
+        return false
+      }
     },
 
     /**
