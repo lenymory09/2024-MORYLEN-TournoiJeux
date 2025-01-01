@@ -11,7 +11,6 @@
 <script setup>
   import AppFooter from "@/components/AppFooter.vue"
   import AppHeader from "@/components/AppHeader.vue"
-
 </script>
 
 <style lang="sass">
@@ -20,3 +19,4 @@ h1
   margin-bottom: 30px
   font-size: 3rem
 </style>
+

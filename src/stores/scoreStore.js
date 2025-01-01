@@ -1,4 +1,5 @@
-import {defineStore} from "pinia";
+import {defineStore} from "pinia"
+import axios from 'axios'
 
 const equipes = [
   {
@@ -30,7 +31,7 @@ const jeuxVideos = [
   },
   {
     id: 2,
-    name: "call of duty"
+    name: "BO6"
   }
 ]
 
@@ -38,7 +39,7 @@ const matchs = [
   {
     id: 1,
     jeu: 1,
-    equipes: [
+    equipe: [
       {
         "name": "Equipe 1",
         "score": 1,
@@ -73,6 +74,8 @@ export const useScoreStore = defineStore('scoreStore', {
     selectedJeu: {},
     selectedMatch: {},
     selectedEquipe: {},
+    apiUrl: 'http://localhost:3000', // URL de base pour accéder à l'API
+    isLoading: false,
   }),
   getters: {
     /**
@@ -104,7 +107,7 @@ export const useScoreStore = defineStore('scoreStore', {
     selectEquipeById(id) {
       const equipeCourrante = this.equipes.find(equipe => equipe.id === id)
       if (equipeCourrante) {
-        this.selectedEquipe = equipe
+        this.selectedEquipe = equipeCourrante
         return true
       } else {
         this.selectedEquipe = null
@@ -112,7 +115,55 @@ export const useScoreStore = defineStore('scoreStore', {
       }
     },
 
-    // todo : créer une action pour charger les données depuis une api
+    /**
+     * Charge les équipes depuis l'API
+     * @returns {Promise<void>} les équipes de l'api
+     */
+    async fetchEquipes() {
+      this.isLoading = true
+      try {
+        const response = await axios.get(`${this.apiUrl}/equipes`)
+        this.equipes = response.data
+      } catch (error) {
+        console.error('Erreur lors du chargement des équipes :', error)
+      } finally {
+        this.isLoading = false
+      }
+    },
+
+    /**
+     * charge les jeux depuis l'API
+     * @returns {Promise<void>} les jeux de l'api
+     */
+    async fetchJeux() {
+      this.isLoading = true
+      try {
+        const response = await axios.get(`${this.apiUrl}/jeux`)
+        this.jeuxVideos = response.data
+      } catch (error) {
+        console.error('Erreur lors du chargement des jeux :', error)
+      } finally {
+        this.isLoading = false
+      }
+    },
+
+    /**
+     * charge les matchs dans l'API
+     * @returns {Promise<void>}
+     */
+    async fetchMatchs() {
+      this.isLoading = true
+      try {
+        const response = await axios.get(`${this.apiUrl}/matchs`)
+          .then(response => {
+            this.matchs = response.data
+          })
+      } catch (error) {
+        console.error("Erreur dans le chargement des matchs :", error)
+      } finally {
+        this.isLoading = false
+      }
+    },
 
     /**
      * retourne le match dont l'id est celui en paramètre
@@ -120,6 +171,8 @@ export const useScoreStore = defineStore('scoreStore', {
      * @returns {{equipes: [{score: number, id: number},{score: number, id: number}], id: number, jeu: number}}
      */
     selectMatchById(id) {
+
+      // recherche l'index du match
       const matchCourrant = this.matchs.find(match => match.id === id)
       if (matchCourrant) {
         this.selectedMatch = matchCourrant
@@ -135,7 +188,7 @@ export const useScoreStore = defineStore('scoreStore', {
      * @param id du jeu
      * @returns {{name: string, id: number} | {name: string, id: number}}
      */
-    selectJeu(id) {
+    selectJeuById(id) {
       this.selectedJeu = this.jeuxVideos.find(jeu => jeu.id === id)
     },
 
@@ -147,11 +200,10 @@ export const useScoreStore = defineStore('scoreStore', {
       let nbPoints = 0
 
       // teste si l'id existe
-      let equipeCourrant = this.equipes.find(equipe => equipe.id === id)
-      if (equipeCourrant) {
-
+      let equipeExiste = this.selectEquipeById(id)
+      if (equipeExiste) {
         // chercher les matchs dont l'équipe en id joue
-        let filteredMatchs = this.matchs.filter(match => match.equipes.some(equipeEl => equipeEl.name.toLowerCase() === equipeCourrant.name.toLowerCase()))
+        let filteredMatchs = this.matchs.filter(match => match.equipes.some(equipeEl => equipeEl.name.toLowerCase() === this.selectedEquipe.name.toLowerCase()))
 
         for (let match of filteredMatchs) {
           // Recherche de l'index de l'équipe dans le match
@@ -160,6 +212,7 @@ export const useScoreStore = defineStore('scoreStore', {
           if (indexEquipe !== -1) { // si l'équipe est trouvée
 
             // Teste si l'équipe a gagné
+            // todo utiliser bool pour alterner les équipes
             if (match.equipes[indexEquipe].score > match.equipes[indexEquipe === 0 ? 1 : 0].score) {
               nbPoints += 3
 
@@ -177,14 +230,22 @@ export const useScoreStore = defineStore('scoreStore', {
 
     /**
      * ajoute une équipe
-     * @param equipe {Object}
+     * @param equipe {Object} à ajouter
      * @returns {{success: boolean, message: string}} retourne un message de succès ou d'erreur
      */
     addEquipe(equipe) {
       if (!equipe.name) {
         return {success: false, message: "Le nom ne peut pas être vide"}
       }
-      equipe.id = this.equipes[this.equipes.length - 1].id + 1
+      // todo ajouter la requête à l'API
+      /*try {
+        const response = await axios.post(`${this.apiUrl}/equipes`, equipe)
+        this.equipes.push(response.data)
+        return {success: true, message: "L'équipe a été ajoutée avec succès"}
+      } catch (error) {
+        console.error('Erreur lors de l\'ajout de l\'équipe :', error)
+        return {success: false, message: "Erreur lors de l'ajout de l'équipe"}
+      }*/
       this.equipes.push(equipe)
       return {success: true, message: "L'équipe a été ajoutée avec succès"}
     },
@@ -197,12 +258,14 @@ export const useScoreStore = defineStore('scoreStore', {
     addMatch(match) {
       // teste si les équipes et les scores sont corrects
       for (let equipe of match.equipes) {
-        // teste si l'équipe a été trouvé
-        let equipeCourrante = this.equipes.find(equipeItem => equipeItem.name === equipe.name)
+        // teste si le nom de l'équipe est vide
+        if (!equipe.name) {
+          return { success: false, message: "Les équipes ne peuvent pas être vides" }
+        }
 
         // teste que les scores ne soit pas plus petit que 0
         if (equipe.score < 0) {
-          return {success: false, message: `Le score de l'équipe ${equipe.name} ne peut pas etre plus petit que 0.`}
+          return { success: false, message: `Le score de l'équipe ${equipe.name} ne peut pas etre plus petit que 0.` }
         }
       }
 
@@ -211,10 +274,40 @@ export const useScoreStore = defineStore('scoreStore', {
         return {success: false, message: "Les équipes qui s'affrontent ne peuvent pas être les mêmes."}
       }
 
+      // Initialise le score à 0 si pas inséré
+      if (!match.equipes[0].score) {
+        match.equipes[0].score = 0
+      }
+      if (!match.equipes[1].score) {
+        match.equipes[1].score = 0
+      }
+
       // si tout est bon on ajoute le match
-      match.id = this.matchs[this.matchs.length - 1].id + 1
       this.matchs.push(match)
       return {success: true, message: "Le match a été ajouté avec succès."}
+    },
+
+    /**
+     * modifie le score d'un match
+     * @param matchModifie nouveau match
+     * @param id du match
+     */
+    modifierScore(id, matchModifie) {
+      // Recherche de l'index du match
+      let indexMatch = this.matchs.findIndex(match => match.id === id)
+
+      // Envoie de la requête à l'API
+      // try {
+      //   const response = await axios.put(`${this.apiUrl}/matchs/${id}`, matchModifie)
+      // } catch (e) {
+      //   console.error("Erreur dans la modification du score : ", e)
+      // }
+
+      // Modification du score localement dans le store
+      if (indexMatch !== -1) {
+        // this.matchs[indexMatch].equipes = resultat
+        this.matchs[indexMatch] = matchModifie
+      }
     },
   }
 })

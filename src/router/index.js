@@ -1,4 +1,4 @@
-/**
+  /**
  * router/index.ts
  *
  * Automatic routes for `./src/pages/*.vue`
