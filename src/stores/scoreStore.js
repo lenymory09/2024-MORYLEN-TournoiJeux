@@ -1,6 +1,6 @@
-import { defineStore } from "pinia"
+import {defineStore} from "pinia"
 import axios from 'axios'
-import uniqid from 'uniqid'
+import {v4 as uuidv4} from 'uuid' // Librairie pour générer des identifiants uniques (UUID).
 
 const equipes = [
   {
@@ -42,12 +42,12 @@ const matchs = [
     jeu: 1,
     equipes: [
       {
-        "name": "Equipe 1",
-        "score": 1,
+        name: "Equipe 1",
+        score: 1,
       },
       {
-        "name": "Equipe 2",
-        "score": 0,
+        name: "Equipe 2",
+        score: 0,
       }
     ]
   },
@@ -75,7 +75,7 @@ export const useScoreStore = defineStore('score', {
     selectedJeu: {},
     selectedMatch: {},
     selectedEquipe: {},
-    apiUrl: 'http://localhost:3000', // URL de base pour accéder à l'API
+    apiUrl: 'http://localhost:8080', // URL de base pour accéder à l'API
     isLoading: false,
   }),
   getters: {
@@ -83,35 +83,28 @@ export const useScoreStore = defineStore('score', {
      * retourne les équipes triées par score
      */
     getEquipesSortedByScore: (state) => {
-      console.log("endroit getEquipesSortedByScore")
       const getPoints = (equipeId) => {
         let nbPoints = 0
 
         // teste si l'id existe
         const currentEquipe = state.equipes.find(equipe => equipe.id === equipeId)
         if (currentEquipe) {
-          console.log("L'equipe existe")
           // chercher les matchs dont l'équipe en id joue
           let filteredMatchs = state.matchs.filter(match => match.equipes.some(equipeEl => equipeEl.name.toLowerCase() === currentEquipe.name.toLowerCase()))
-          console.log("matchs triés : ", JSON.stringify(filteredMatchs))
 
           // Calcul des points de chaque match participé par l'équipe
           for (let match of filteredMatchs) {
             // Recherche de l'index de l'équipe dans le match
             let indexEquipe = match.equipes.findIndex(equipe => equipe.name === currentEquipe.name)
-            console.log("index de l'équipe : " + indexEquipe)
             if (indexEquipe !== -1) { // si l'équipe est trouvée
 
               // Teste si l'équipe a gagné
-              // todo utiliser bool pour alterner les équipes
-              if (match.equipes[indexEquipe].score > match.equipes[indexEquipe === 0 ? 1 : 0].score) {
-                nbPoints += 3
-
+              if (match.equipes[indexEquipe].score > match.equipes[1 - indexEquipe].score) {
+                nbPoints += 3;
                 // Teste si l'équipe a fait égalité
-              } else if (match.equipes.at(indexEquipe).score === match.equipes.at(indexEquipe === 0 ? 1 : 0).score) {
-                nbPoints += 1
+              } else if (match.equipes[indexEquipe].score === match.equipes[1 - indexEquipe].score) {
+                nbPoints += 1;
               }
-              console.log("nbPoints : " + nbPoints)
             }
           }
         } else {
@@ -119,7 +112,15 @@ export const useScoreStore = defineStore('score', {
         }
         return nbPoints
       }
-      const sortedEquipes = state.equipes.slice().sort((a, b) => getPoints(b.id) - getPoints(a.id)) // Utilise this pour appeler l'action
+
+      // Calcul des points
+      const pointsMap = new Map()
+      state.equipes.forEach((equipe) => {
+        pointsMap.set(equipe.id, getPoints(equipe.id))
+      })
+
+      // Triage des équipes par points
+      const sortedEquipes = state.equipes.slice().sort((a, b) => pointsMap.get(b.id) - pointsMap.get(a.id)) // Utilise this pour appeler l'action
       console.log("équipes triées : ", JSON.stringify(sortedEquipes))
       return sortedEquipes
     },
@@ -134,55 +135,13 @@ export const useScoreStore = defineStore('score', {
         listeNoms.push(equipe.name)
       }
       return listeNoms
-        .getEquipesSortedByScore()
     },
-
-    /**
-     * obtenir le nombre de points
-     * @param equipeId de l'équipe
-     */
-    /*getPoints: (state) => {
-      (equipeId) => {
-        let nbPoints = 0
-
-        // teste si l'id existe
-        const equipe = state.matchs.find(match => match.id === equipeId)
-        if (equipe) {
-          console.log("L'equipe existe")
-          // chercher les matchs dont l'équipe en id joue
-          let filteredMatchs = this.matchs.filter(match => match.equipes.some(equipeEl => equipeEl.name.toLowerCase() === equipe.name.toLowerCase()))
-          console.log("matchs triés : ", JSON.stringify(filteredMatchs))
-
-          for (let match of filteredMatchs) {
-            // Recherche de l'index de l'équipe dans le match
-            let indexEquipe = match.equipes.findIndex(equipe => equipe.name === this.selectedEquipe.name)
-            console.log("index de l'équipe : " + indexEquipe)
-            if (indexEquipe !== -1) { // si l'équipe est trouvée
-
-              // Teste si l'équipe a gagné
-              // todo utiliser bool pour alterner les équipes
-              if (match.equipes[indexEquipe].score > match.equipes[indexEquipe === 0 ? 1 : 0].score) {
-                nbPoints += 3
-
-                // Teste si l'équipe a fait égalité
-              } else if (match.equipes[indexEquipe].score === match.equipes[indexEquipe === 0 ? 1 : 0].score) {
-                nbPoints += 1
-              }
-              console.log("nbPoints : " + nbPoints)
-            }
-          }
-        } else {
-          return -1
-        }
-        return nbPoints
-      }
-    },*/
   },
   actions: {
 
     /**
      * retourne l'équipe dont l'id est celui en paramètre
-     * @param id {String} de l'équipe 
+     * @param id {String} de l'équipe
      * @returns true si l'équipe existe et false sinon
      */
     selectEquipeById(id) {
@@ -249,13 +208,13 @@ export const useScoreStore = defineStore('score', {
     /**
      * retourne le match dont l'id est celui en paramètre
      * @param id du match
-     * @returns {{equipes: [{score: number, id: number},{score: number, id: number}], id: number, jeu: number}}
+     * @returns vrai si le match existe et faux sinon
      */
     selectMatchById(id) {
-
       // recherche l'index du match
       const matchCourrant = this.matchs.find(match => match.id === id)
       if (matchCourrant) {
+        console.log("Recherche de l'index du match...")
         this.selectedMatch = matchCourrant
         return true
       } else {
@@ -279,34 +238,29 @@ export const useScoreStore = defineStore('score', {
      * @returns nombre de points
      */
     getPoints(id) {
-      console.log("endroit getPoints")
       let nbPoints = 0
 
       // teste si l'id existe
       let equipeExiste = this.selectEquipeById(id)
       if (equipeExiste) {
-        console.log("L'equipe existe")
+        // console.log(`L'equipe ${this.selectedEquipe.name} existe`)
         // chercher les matchs dont l'équipe en id joue
         let filteredMatchs = this.matchs.filter(match => match.equipes.some(equipeEl => equipeEl.name.toLowerCase() === this.selectedEquipe.name.toLowerCase()))
-        console.log("matchs triés : ", JSON.stringify(filteredMatchs))
+        // console.log("matchs triés : ", JSON.stringify(filteredMatchs))
 
         // Calcule des points
         for (let match of filteredMatchs) {
           // Recherche de l'index de l'équipe dans le match
           let indexEquipe = match.equipes.findIndex(equipe => equipe.name === this.selectedEquipe.name)
-          console.log("index de l'équipe : " + indexEquipe)
           if (indexEquipe !== -1) { // si l'équipe est trouvée
 
             // Teste si l'équipe a gagné
-            // todo utiliser bool pour alterner les équipes
-            if (match.equipes.at(indexEquipe).score > match.equipes.at(indexEquipe === 0 ? 1 : 0).score) {
-              nbPoints += 3
-
+            if (match.equipes[indexEquipe].score > match.equipes[1 - indexEquipe].score) {
+              nbPoints += 3;
               // Teste si l'équipe a fait égalité
-            } else if (match.equipes.at(indexEquipe).score === match.equipes.at(indexEquipe === 0 ? 1 : 0).score) {
-              nbPoints += 1
+            } else if (match.equipes[indexEquipe].score === match.equipes[1 - indexEquipe].score) {
+              nbPoints += 1;
             }
-            console.log("nbPoints : " + nbPoints)
           }
         }
       } else {
@@ -320,21 +274,22 @@ export const useScoreStore = defineStore('score', {
      * @param equipe {Object} à ajouter
      * @returns {{success: boolean, message: string}} retourne un message de succès ou d'erreur
      */
-    addEquipe(equipe) {
+    async addEquipe(equipe) {
       if (!equipe.name) {
-        return { success: false, message: "Le nom ne peut pas être vide" }
+        return {success: false, message: "Le nom ne peut pas être vide"}
       }
+
       // todo ajouter la requête à l'API
-      /*try {
+      try {
+        // Ajout d'un id à l'équipe
+        equipe.id = uuidv4()
         const response = await axios.post(`${this.apiUrl}/equipes`, equipe)
-        this.equipes.push(response.data)
+        this.equipes.push(equipe)
         return {success: true, message: "L'équipe a été ajoutée avec succès"}
       } catch (error) {
         console.error('Erreur lors de l\'ajout de l\'équipe :', error)
         return {success: false, message: "Erreur lors de l'ajout de l'équipe"}
-      }*/
-      this.equipes.push(equipe)
-      return { success: true, message: "L'équipe a été ajoutée avec succès" }
+      }
     },
 
     /**
@@ -347,23 +302,23 @@ export const useScoreStore = defineStore('score', {
       for (let equipe of match.equipes) {
         // teste si le nom de l'équipe est vide
         if (!equipe.name) {
-          return { success: false, message: "Les équipes ne peuvent pas être vides" }
+          return {success: false, message: "Les équipes ne peuvent pas être vides"}
         }
 
         // teste que les scores ne soit pas plus petit que 0
         if (equipe.score < 0) {
-          return { success: false, message: `Le score de l'équipe ${equipe.name} ne peut pas etre plus petit que 0.` }
+          return {success: false, message: `Le score de l'équipe ${equipe.name} ne peut pas etre plus petit que 0.`}
         }
       }
 
       // teste si les équipes sont différentes
       if (match.equipes.at(0).name === match.equipes.at(1).name) {
-        return { success: false, message: "Les équipes qui s'affrontent ne peuvent pas être les mêmes." }
+        return {success: false, message: "Les équipes qui s'affrontent ne peuvent pas être les mêmes."}
       }
 
       // Teste si le jeu n'est pas vide
       if (!match.jeu) {
-        return { success: false, message: "Le jeu ne peut pas être vide" }
+        return {success: false, message: "Le jeu ne peut pas être vide"}
       }
 
       // Initialise le score à 0 si pas inséré
@@ -384,31 +339,34 @@ export const useScoreStore = defineStore('score', {
 
       // si tout est bon on ajoute le match
       this.matchs.push(match)
-      return { success: true, message: "Le match a été ajouté avec succès." }
+      return {success: true, message: "Le match a été ajouté avec succès."}
     },
 
     /**
      * modifie le score d'un match
-     * @param matchModifie nouveau match
-     * @param id du match
+     * @param nouveauScore nouveau match
+     * @param id du match à mofifier
      */
-    modifierScore(matchModifie) {
-      // Recherche de l'index du match
-      let indexMatch = this.matchs.findIndex(match => match.id === matchModifie.id)
+    modifierScore(nouveauScore, id) {
 
-      if (indexMatch !== -1) {
+      // Envoie de la requête à l'API
+      // todo implémenter la requête à l'API
+      try {
+        // Requete à l'API
+        // const response = axios.put(`${this.apiUrl}/matchs/${id}`, nouveauScore)
 
-        // Envoie de la requête à l'API
-        // todo implémenter la requête à l'API
-        try {
-
-        } catch (error) {
-          console.error("Erreur dans le changement du score : ", error)
+        // Recherche de l'index du match
+        let indexMatch = this.matchs.findIndex(match => match.id === nouveauScore.id)
+        if (indexMatch !== -1) {
+          // Modification du score localement dans le store
+          this.matchs.value[indexMatch].equipes[0].score = nouveauScore.score1
+          this.matchs.value[indexMatch].equipes[1].score = nouveauScore.score2
         }
 
-        // Modification du score localement dans le store
-        this.matchs[indexMatch] = matchModifie
+        return {success: true, message: "Le score a été modifié avec succès."}
+      } catch (error) {
+        console.error("Erreur dans le changement du score : ", error)
       }
-    },
-  }
+    }
+  },
 })

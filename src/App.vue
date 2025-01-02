@@ -10,12 +10,9 @@
 
 <script setup>
   import { onMounted } from "vue"
-  import uniqid from "uniqid"
   import AppFooter from "@/components/AppFooter.vue"
   import AppHeader from "@/components/AppHeader.vue"
   onMounted(async () => {
-    // Test uniqid
-    console.log("uniqid : ", uniqid())
   })
 </script>
 
