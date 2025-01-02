@@ -27,7 +27,7 @@ const rules = [
 /**
  * Fonction pour ajouter un match
  */
-function addMatch() {
+const addMatch = () => {
   // Petit log
   console.log(JSON.stringify(match.value))
 
@@ -39,7 +39,6 @@ function addMatch() {
     // Réinitialisation des données après succès
     reponse.value = null
     match.value = {
-      id: 0,
       jeu: "",
       equipes: [
         {name: "", score: 0},

@@ -2,14 +2,14 @@
 import {useRoute, useRouter} from 'vue-router'
 import {useScoreStore} from '@/stores/scoreStore'
 import {onMounted} from "vue";
-import { storeToRefs } from "pinia";
+import {storeToRefs} from "pinia";
 
 // Récupération de la route active pour accéder aux paramètres
 const route = useRoute()
 const router = useRouter()
 const scoreStore = useScoreStore()
-const { selectMatchById } = scoreStore
-const { selectedMatch } = storeToRefs(scoreStore)
+const {selectMatchById} = scoreStore
+const {selectedMatch} = storeToRefs(scoreStore)
 
 // Le nom de ce fichier pokemon/[id].vue créer une route dynamique avec un paramètre `id`
 // route.params.id permet de récupérer la valeur de l'ID dans l'URL
@@ -18,25 +18,23 @@ const idMatch = route.params.id
 console.log(route.params.id)
 // Vérification et récupération du Pokémon avec l'ID fourni
 // Si le Pokémon n'existe pas, redirection vers une page 404
-const matchExists = selectMatchById(parseInt(idMatch))
 
-if (!matchExists) {
-  console.log("L'équipe n'a pas été trouvé")
-  router.push('/404') // Redirection en cas d'ID invalide
-}
+// création d'un nouveau match
+const nouveauMatch = ref(null)
 
-const nouveauMatch = ref({
-  // id: 0,
-  name: "",
-  equipes: [
-    {name: "", score: 0},
-    {name: "", score: 0},
-  ],
+onMounted(() => {
+  const matchExists = selectMatchById(idMatch)
+
+  if (!matchExists) {
+    console.log("L'équipe n'a pas été trouvé")
+    router.push('/404') // Redirection en cas d'ID invalide
+  }
+
+  // fait une copie du match sélectionné pour éviter de modifier directement le store
+  nouveauMatch.value = JSON.parse(JSON.stringify(scoreStore.selectedMatch))
 })
 
-nouveauMatch.value = scoreStore.selectedMatch
-
-function modifierScore() {
+const modifierScore = () => {
   // Petit log 🤓 (pour être sûr que je ne fasse pas de la merde)
   console.log(JSON.stringify(nouveauMatch.value))
 
@@ -47,33 +45,32 @@ function modifierScore() {
     router.push("/matchs")
   } else {
     console.log("Match non trouvé")
-    return
   }
 }
 </script>
 
 <template>
-    <h1>Match</h1>
+  <h1>Match</h1>
 
-    <!-- Premier score et formulaire de changement -->
-    <h2 class="d-inline">{{ selectedMatch.equipes[0].name }} -
-      {{ selectedMatch.equipes[0].score }}</h2>
-    <v-text-field
-      label="Score"
-      v-model.number="nouveauMatch.equipes[0].score"
-      type="number"/>
+  <!-- Premier score et formulaire de changement -->
+  <h2 class="d-inline">{{ selectedMatch.equipes.at(0).name }} -
+    {{ selectedMatch.equipes.at(0).score }}</h2>
+  <v-text-field
+    label="Score"
+    v-model.number="nouveauMatch.equipes.at(0).score"
+    type="number"/>
 
-    <!-- Deuxième score et formulaire de changement -->
-    <h2 class="d-inline">{{ selectedMatch.equipes[1].name }} -
-      {{ selectedMatch.equipes[1].score }}</h2>
-    <v-text-field
-      label="Score"
-      v-model.number="nouveauMatch.equipes[1].score"
-      type="number"
-    />
+  <!-- Deuxième score et formulaire de changement -->
+  <h2 class="d-inline">{{ selectedMatch.equipes.at(1).name }} -
+    {{ selectedMatch.equipes.at(1).score }}</h2>
+  <v-text-field
+    label="Score"
+    v-model.number="nouveauMatch.equipes.at(1).score"
+    type="number"
+  />
 
-    <!-- bouton de submit du formulaire -->
-    <v-btn @click="modifierScore">Changer les scores</v-btn>
+  <!-- bouton de submit du formulaire -->
+  <v-btn @click="modifierScore">Changer les scores</v-btn>
 </template>
 
 <style scoped lang="sass">

@@ -6,7 +6,7 @@
   <v-list lines="two">
     <v-list-item
       class="mb-5"
-      v-for="equipe in getEquipesSortedByScore"
+      v-for="equipe in equipes"
       :key="equipe.id"
     >
       <v-list-item-title>{{ equipe.name }} - {{ scoreStore.getPoints(equipe.id) }} points.</v-list-item-title>
