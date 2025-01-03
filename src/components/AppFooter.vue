@@ -1,7 +1,7 @@
 <template>
   <v-footer height="40" app>
     <v-row align="center" justify="center">
-      <p>&copy;2024 - Leny et Léo Mory</p>
+      <p>&copy;2024 - Mory Corp.</p>
     </v-row>
   </v-footer>
 </template>

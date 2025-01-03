@@ -9,7 +9,7 @@
       v-for="equipe in equipes"
       :key="equipe.id"
     >
-      <v-list-item-title>{{ equipe.name }} - {{ scoreStore.getPoints(equipe.id) }} points.</v-list-item-title>
+      <v-list-item-title>{{ equipe.name }} - {{ equipe.nbPoints }} points.</v-list-item-title>
     </v-list-item>
   </v-list>
 </template>

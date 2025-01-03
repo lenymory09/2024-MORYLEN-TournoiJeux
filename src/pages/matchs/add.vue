@@ -7,11 +7,11 @@ import {storeToRefs} from "pinia";
 
 // Importation du magasin de score
 const scoreStore = useScoreStore()
-const { jeuxVideos } = storeToRefs(scoreStore)
-const { getNomsEquipes } = scoreStore
+const {jeuxVideos} = storeToRefs(scoreStore)
+const {getNomsEquipes} = scoreStore
 
 // initialisation des données pour l'ajout des matchs
-const reponse = ref(null)
+const response = ref(null)
 const match = ref({
   jeu: "",
   equipes: [
@@ -27,17 +27,18 @@ const rules = [
 /**
  * Fonction pour ajouter un match
  */
-const addMatch = () => {
+const addMatch = async () => {
   // Petit log
   console.log(JSON.stringify(match.value))
 
   // Ajout du match
-  reponse.value = scoreStore.addMatch(match.value)
+  response.value = await scoreStore.addMatch(match.value)
 
+  console.log("message : ", response.value.message)
   // Si l'ajout est un succès, redirection vers la page d'accueil
-  if (reponse.value.success) {
+  if (response.value.success) {
     // Réinitialisation des données après succès
-    reponse.value = null
+    response.value = {}
     match.value = {
       jeu: "",
       equipes: [
@@ -90,14 +91,15 @@ const addMatch = () => {
     />
 
     <v-alert
-      v-if="reponse"
+      v-if="response"
       border="top"
       type="warning"
       variant="outlined"
       prominent
     >
-      {{ reponse.message }}
+      {{ response.message }}
     </v-alert>
+
     <v-btn type="submit">Ajouter</v-btn>
   </v-form>
 </template>

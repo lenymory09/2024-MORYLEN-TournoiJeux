@@ -2,7 +2,7 @@ import {defineStore} from "pinia"
 import axios from 'axios'
 import {v4 as uuidv4} from 'uuid' // Librairie pour générer des identifiants uniques (UUID).
 
-const equipes = [
+/*const equipes = [
   {
     id: '1',
     name: "Equipe 1",
@@ -27,11 +27,11 @@ const equipes = [
 
 const jeuxVideos = [
   {
-    id: 1,
+    id: '1',
     name: "Rocket league"
   },
   {
-    id: 2,
+    id: '2',
     name: "BO6"
   }
 ]
@@ -66,11 +66,11 @@ const matchs = [
     ]
   },
 ]
-
+*/
 export const useScoreStore = defineStore('score', {
   state: () => ({
-    equipes,
-    matchs,
+    equipes: [],
+    matchs: [],
     jeuxVideos,
     selectedJeu: {},
     selectedMatch: {},
@@ -120,7 +120,10 @@ export const useScoreStore = defineStore('score', {
       })
 
       // Triage des équipes par points
-      const sortedEquipes = state.equipes.slice().sort((a, b) => pointsMap.get(b.id) - pointsMap.get(a.id)) // Utilise this pour appeler l'action
+      let sortedEquipes = state.equipes.slice().sort((a, b) => pointsMap.get(b.id) - pointsMap.get(a.id)) // Utilise this pour appeler l'action
+      for (let index = 0; index < sortedEquipes.length; index++) {
+        sortedEquipes[index].nbPoints = pointsMap.get(sortedEquipes[index].id)
+      }
       console.log("équipes triées : ", JSON.stringify(sortedEquipes))
       return sortedEquipes
     },
@@ -144,7 +147,7 @@ export const useScoreStore = defineStore('score', {
      * @param id {String} de l'équipe
      * @returns true si l'équipe existe et false sinon
      */
-    selectEquipeById(id) {
+    selectEquipeById: (id) => {
       const equipeCourrante = this.equipes.find(equipe => equipe.id === id)
       if (equipeCourrante) {
         this.selectedEquipe = equipeCourrante
@@ -195,9 +198,10 @@ export const useScoreStore = defineStore('score', {
       this.isLoading = true
       try {
         const response = await axios.get(`${this.apiUrl}/matchs`)
-          .then(response => {
-            this.matchs = response.data
-          })
+        if (response.status === 200) {
+          this.matchs = response.data
+          console.log("Matchs chargés avec succès")
+        }
       } catch (error) {
         console.error("Erreur dans le chargement des matchs :", error)
       } finally {
@@ -279,25 +283,31 @@ export const useScoreStore = defineStore('score', {
         return {success: false, message: "Le nom ne peut pas être vide"}
       }
 
-      // todo ajouter la requête à l'API
       try {
         // Ajout d'un id à l'équipe
         equipe.id = uuidv4()
-        const response = await axios.post(`${this.apiUrl}/equipes`, equipe)
-        this.equipes.push(equipe)
-        return {success: true, message: "L'équipe a été ajoutée avec succès"}
+        const response = await axios.post(`${this.apiUrl}/equipes`, equipe, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+
+        if (response.status === 201) {
+          this.equipes.push(equipe)
+          return {success: true, message: "L'équipe a été ajoutée avec succès"}
+        }
       } catch (error) {
-        console.error('Erreur lors de l\'ajout de l\'équipe :', error)
+        console.error('Erreur lors de l\'ajout de l\'équipe :', JSON.stringify(error))
         return {success: false, message: "Erreur lors de l'ajout de l'équipe"}
       }
     },
 
     /**
-     * ajoute un match
-     * @param match à ajouter
+     * check si le match est correct
+     * @param match à checker
      * @returns {{success: boolean, message: string}} retourne un message de succès ou d'erreur
      */
-    addMatch(match) {
+    checkMatch(match) {
       // teste si les équipes et les scores sont corrects
       for (let equipe of match.equipes) {
         // teste si le nom de l'équipe est vide
@@ -321,6 +331,21 @@ export const useScoreStore = defineStore('score', {
         return {success: false, message: "Le jeu ne peut pas être vide"}
       }
 
+      return {success: true, message: "Le match est correct"}
+    },
+
+    /**
+     * ajoute un match
+     * @param match à ajouter
+     * @returns {{success: boolean, message: string}} retourne un message de succès ou d'erreur
+     */
+    async addMatch(match) {
+      const checkMatch = this.checkMatch(match)
+      // Check des données
+      if (!checkMatch.success){
+        return checkMatch
+      }
+
       // Initialise le score à 0 si pas inséré
       if (!match.equipes[0].score) {
         match.equipes[0].score = 0
@@ -329,17 +354,33 @@ export const useScoreStore = defineStore('score', {
         match.equipes[1].score = 0
       }
 
-      // Requête de l'API
-      // todo implémenter la requête à l'API
-      // try {
-      //   const response = await axios.post(`${this.apiUrl}/matchs`, match)
-      // } catch (e) {
-      //   console.error("Erreur dans l'ajout du match : ", e)
-      // }
+      match.id = uuidv4()
 
-      // si tout est bon on ajoute le match
-      this.matchs.push(match)
-      return {success: true, message: "Le match a été ajouté avec succès."}
+      const matchSend = {
+        id: match.id,
+        jeu: match.jeu,
+        equipe1: this.getIdEquipeByName(match.equipes[0].name),
+        score1: match.equipes[0].score,
+        equipe2: this.getIdEquipeByName(match.equipes[1].name),
+        score2: match.equipes[1].score
+      }
+
+      // Requête de l'API
+      try {
+        console.log(JSON.stringify(matchSend))
+        const response = await axios.post(`${this.apiUrl}/matchs`, matchSend, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        if (response.status === 201) {
+          this.matchs.push(match)
+          return {success: true, message: "Match ajouté avec succès !"}
+        }
+      } catch (e) {
+        console.error("Erreur dans l'ajout du match : ", e)
+        return {success: false, message: "Erreur lors de l'ajout du match"}
+      }
     },
 
     /**
@@ -347,13 +388,13 @@ export const useScoreStore = defineStore('score', {
      * @param nouveauScore nouveau match
      * @param id du match à mofifier
      */
-    modifierScore(nouveauScore, id) {
+    async modifierScore(nouveauScore, id) {
 
       // Envoie de la requête à l'API
       // todo implémenter la requête à l'API
       try {
         // Requete à l'API
-        // const response = axios.put(`${this.apiUrl}/matchs/${id}`, nouveauScore)
+        const response = await axios.put(`${this.apiUrl}/matchs/${id}`, nouveauScore)
 
         // Recherche de l'index du match
         let indexMatch = this.matchs.findIndex(match => match.id === nouveauScore.id)
@@ -367,6 +408,13 @@ export const useScoreStore = defineStore('score', {
       } catch (error) {
         console.error("Erreur dans le changement du score : ", error)
       }
+    },
+    /**
+     * @param name nom de l'équipe
+     */
+    getIdEquipeByName(name) {
+      // cherche l'id de l'équipe avec le nom passé en parametre.
+      return this.equipes.find(equipe => equipe.name === name).id
     }
   },
 })

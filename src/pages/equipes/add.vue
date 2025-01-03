@@ -1,29 +1,33 @@
 <script setup>
-  // Importattion des fonctions et variables nécessaires
-import { ref } from "vue"
-  import { useScoreStore } from "@/stores/scoreStore"
-  import router from "@/router";
-  const scoreStore = useScoreStore()
+// Importattion des fonctions et variables nécessaires
+import {ref} from "vue"
+import {useScoreStore} from "@/stores/scoreStore"
+import router from "@/router";
 
-  const response = ref(null)
+const scoreStore = useScoreStore()
 
-  const equipe = ref({ name: "" })
-  function addEquipe() {
-    response.value = scoreStore.addEquipe(equipe.value)
+const response = ref(null)
 
-    if (response.value.success) {
-      // Réinitialisation des données après succès
-      response.value = null
-      equipe.value = { name: "" }
-      router.push("/")
-    }
+const equipe = ref({name: ""})
+
+async function addEquipe() {
+  response.value = await scoreStore.addEquipe(equipe.value)
+
+  console.log(JSON.stringify(response.value))
+
+  if (response.value.success) {
+    // Réinitialisation des données après succès
+    response.value = null
+    equipe.value = {name: ""}
+    router.push("/")
   }
+}
 </script>
 
 <template>
   <h1>Ajouter une équipe</h1>
   <v-form @submit.prevent="addEquipe">
-    <v-text-field :rules="rules" label="Nom de l'équipe" v-model.trim="equipe.name" />
+    <v-text-field label="Nom de l'équipe" v-model.trim="equipe.name"/>
     <v-alert
       v-if="response"
       border="top"
