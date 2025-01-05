@@ -12,6 +12,7 @@
     <tr
       v-for="(equipe, index) in equipes"
       :key="equipe.id"
+      @dblclick="deleteEquipe(equipe.id)"
     >
       <td>{{ index + 1 }}</td>
       <td>{{ equipe.name }}</td>
@@ -23,10 +24,17 @@
 <script setup>
 import {useScoreStore} from "@/stores/scoreStore"
 import {computed} from "vue"
+import {storeToRefs} from "pinia"
 
 const scoreStore = useScoreStore()
 const {getEquipesSortedByScore} = scoreStore
-const equipes = computed(() => getEquipesSortedByScore)
+const equipes = computed(() => {
+  return getEquipesSortedByScore
+})
+
+const deleteEquipe = async (id) => {
+  await scoreStore.deleteEquipe(id)
+}
 </script>
 
 <style>

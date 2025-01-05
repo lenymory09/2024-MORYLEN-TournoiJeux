@@ -393,31 +393,87 @@ export const useScoreStore = defineStore('score', {
      */
     async modifierScore(nouveauScore, id) {
 
+      if (!nouveauScore.score1 === null || !nouveauScore.score2 === null ||
+        !nouveauScore.score1 === undefined || !nouveauScore.score2 === undefined) {
+        return {success: false, message: "Les scores ne peuvent pas être vides."}
+      }
+
       // Envoie de la requête à l'API
-      // todo implémenter la requête à l'API
       try {
         // Requete à l'API
         const response = await axios.put(`${this.apiUrl}/matchs/${id}`, nouveauScore)
 
         // Recherche de l'index du match
-        let indexMatch = this.matchs.findIndex(match => match.id === nouveauScore.id)
+        let indexMatch = this.matchs.findIndex(match => match.id === id)
+        console.log("Index du match : ", indexMatch)
         if (indexMatch !== -1) {
           // Modification du score localement dans le store
-          this.matchs.value[indexMatch].equipes[0].score = nouveauScore.score1
-          this.matchs.value[indexMatch].equipes[1].score = nouveauScore.score2
+          this.matchs[indexMatch].equipes[0].score = nouveauScore.score1
+          this.matchs[indexMatch].equipes[1].score = nouveauScore.score2
+        } else {
+          console.log("Match non trouvé")
         }
 
         return {success: true, message: "Le score a été modifié avec succès."}
       } catch (error) {
         console.error("Erreur dans le changement du score : ", error)
+        return {success: false, message: "Erreur lors du changement du score."}
       }
     },
+
     /**
      * @param name nom de l'équipe
      */
     getIdEquipeByName(name) {
       // cherche l'id de l'équipe avec le nom passé en parametre.
       return this.equipes.find(equipe => equipe.name === name).id
+    },
+
+    /**
+     * Supprime une équipe
+     * @param id de l'équipe à supprimer
+     * @returns {{success: boolean, message: string}} retourne un message de succès ou d'erreur
+     */
+    deleteEquipe(id) {
+      try {
+        const response = axios.delete(`${this.apiUrl}/equipes/${id}`)
+
+        // Recherche de l'index de l'équipe
+        let indexEquipe = this.equipes.findIndex(equipe => equipe.id === id)
+        if (indexEquipe !== -1) {
+          console.log("Suppression de l'équipe localement...")
+          this.equipes.splice(indexEquipe, 1)
+        }
+
+        return {success: true, message: "L'équipe a été supprimée avec succès."}
+      } catch (error) {
+        console.error("Erreur lors de la suppression de l'équipe : ", error)
+        return {success: false, message: "Erreur lors de la suppression de l'équipe."}
+      }
+    },
+
+    /**
+     * Supprime un match
+     * @param id du match à supprimer
+     * @returns {{success: boolean, message: string}} retourne un message de succès ou d'erreur
+     */
+    deleteMatch(id) {
+      try {
+        // Envoie de la requette à l'API
+        const response = axios.delete(`${this.apiUrl}/matchs/${id}`)
+
+        // Recherche de l'index du match
+        let indexMatch = this.matchs.findIndex(match => match.id === id)
+        if (indexMatch !== -1) {
+          console.log("Suppression du match localement...")
+          this.matchs.splice(indexMatch, 1)
+        }
+
+        return {success: true, message: "Le match a été supprimé avec succès"}
+      } catch (e) {
+        console.log("Erreur lors de la suppression du match : ", e)
+        return {success: false, message: "Erreur lors de la suppression du match."}
+      }
     }
   },
 })
