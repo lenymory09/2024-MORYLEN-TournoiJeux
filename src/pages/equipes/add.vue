@@ -33,7 +33,7 @@ const response = ref(null)
 const equipe = ref({name: ""})
 
 const ajouterEquipe = async () => {
-  response.value = await add(equipe.value)
+  response.value = add(equipe.value)
   console.log(JSON.stringify(response.value))
 
   if (response.value && response.value.success) {

@@ -27,12 +27,12 @@ const rules = [
 /**
  * Fonction pour ajouter un match
  */
-const addMatch = async () => {
+const addMatch = () => {
   // Petit log
   console.log(JSON.stringify(match.value))
 
   // Ajout du match
-  response.value = await scoreStore.addMatch(match.value)
+  response.value = scoreStore.addMatch(match.value)
 
   console.log("message : ", response.value.message)
   // Si l'ajout est un succès, redirection vers la page d'accueil

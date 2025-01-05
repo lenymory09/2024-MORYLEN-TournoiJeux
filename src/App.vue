@@ -14,9 +14,8 @@ import AppHeader from "@/components/AppHeader.vue"
 
 onMounted(async () => {
   const scoreStore = useScoreStore()
-  await scoreStore.fetchEquipes()
-  await scoreStore.fetchMatchs()
-  await scoreStore.fetchJeux()
+  scoreStore.loadEquipes()
+  scoreStore.loadMatchs()
 })
 </script>
 

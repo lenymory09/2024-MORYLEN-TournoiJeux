@@ -41,12 +41,12 @@ onMounted(() => {
   }
 })
 
-const modifierScore = async () => {
+const modifierScore = () => {
   // Petit log 🤓 (pour être sûr que je ne fasse pas de la merde)
   console.log(JSON.stringify(nouveauScore.value))
 
   // Modifier le score du match
-  response.value = await scoreStore.modifierScore(nouveauScore.value, idMatch)
+  response.value = scoreStore.modifierScore(nouveauScore.value, idMatch)
 
   // Cherche l'index du match dans le store.
   // let indexMatch = scoreStore.matchs.findIndex(match => match.id === idMatch)
@@ -59,8 +59,8 @@ const modifierScore = async () => {
   }
 }
 
-const deleteMatch = async (id) => {
-  response.value = await scoreStore.deleteMatch(id)
+const deleteMatch = (id) => {
+  response.value = scoreStore.deleteMatch(id)
   if (response.value.success) {
     router.push("/matchs")
     console.log("Match supprimé avec succès")

@@ -23,19 +23,23 @@ import {v4 as uuidv4} from 'uuid' // Librairie pour générer des identifiants u
     id: '5',
     name: "Equipe 5",
   }
-]
+]*/
 
 const jeuxVideos = [
   {
     id: '1',
-    name: "Rocket league"
+    name: "Street fighter"
   },
   {
     id: '2',
-    name: "BO6"
+    name: "Call of duty : Black ops 6"
+  },
+  {
+    id: '3',
+    name: "Mario kart 8 Deluxe",
   }
 ]
-
+/*
 const matchs = [
   {
     id: '1',
@@ -71,7 +75,7 @@ export const useScoreStore = defineStore('score', {
   state: () => ({
     equipes: [],
     matchs: [],
-    jeuxVideos: [],
+    jeuxVideos,
     selectedJeu: {},
     selectedMatch: {},
     selectedEquipe: {},
@@ -143,6 +147,17 @@ export const useScoreStore = defineStore('score', {
   actions: {
 
     /**
+     * Récupère la liste des équipes depuis le localStorage
+     */
+    loadEquipes() {
+      this.equipes = JSON.parse(localStorage.getItem('equipes')) || []
+    },
+
+    loadMatchs() {
+      this.matchs = JSON.parse(localStorage.getItem('matchs')) || []
+    },
+
+    /**
      * retourne l'équipe dont l'id est celui en paramètre
      * @param id {String} de l'équipe
      * @returns true si l'équipe existe et false sinon
@@ -155,57 +170,6 @@ export const useScoreStore = defineStore('score', {
       } else {
         this.selectedEquipe = null
         return false
-      }
-    },
-
-    /**
-     * Charge les équipes depuis l'API
-     * @returns {Promise<void>} les équipes de l'api
-     */
-    async fetchEquipes() {
-      this.isLoading = true
-      try {
-        const response = await axios.get(`${this.apiUrl}/equipes`)
-        this.equipes = response.data
-      } catch (error) {
-        console.error('Erreur lors du chargement des équipes :', error)
-      } finally {
-        this.isLoading = false
-      }
-    },
-
-    /**
-     * charge les jeux depuis l'API
-     * @returns {Promise<void>} les jeux de l'api
-     */
-    async fetchJeux() {
-      this.isLoading = true
-      try {
-        const response = await axios.get(`${this.apiUrl}/jeux`)
-        this.jeuxVideos = response.data
-      } catch (error) {
-        console.error('Erreur lors du chargement des jeux :', error)
-      } finally {
-        this.isLoading = false
-      }
-    },
-
-    /**
-     * charge les matchs dans l'API
-     * @returns {Promise<void>}
-     */
-    async fetchMatchs() {
-      this.isLoading = true
-      try {
-        const response = await axios.get(`${this.apiUrl}/matchs`)
-        if (response.status === 200) {
-          this.matchs = response.data
-          console.log("Matchs chargés avec succès")
-        }
-      } catch (error) {
-        console.error("Erreur dans le chargement des matchs :", error)
-      } finally {
-        this.isLoading = false
       }
     },
 
@@ -278,7 +242,7 @@ export const useScoreStore = defineStore('score', {
      * @param equipe {Object} à ajouter
      * @returns {{success: boolean, message: string}} retourne un message de succès ou d'erreur
      */
-    async addEquipe(equipe) {
+    addEquipe(equipe) {
       if (!equipe.name) {
         console.log("Le nom ne peut pas être vide")
         return {success: false, message: "Le nom ne peut pas être vide"}
@@ -292,17 +256,12 @@ export const useScoreStore = defineStore('score', {
       // Ajout d'un id à l'équipe
       equipe.id = uuidv4()
 
-      return await axios.post(`${this.apiUrl}/equipes`, equipe, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(response => {
-        this.equipes.push(equipe)
-        return {success: true, message: "L'équipe a été ajoutée avec succès"}
-      }).catch(error => {
-        console.error('Erreur lors de l\'ajout de l\'équipe :', JSON.stringify(error))
-        return {success: false, message: "Erreur lors de l'ajout de l'équipe"}
-      })
+      this.equipes.push(equipe)
+
+      // Enregistrement des équipes dans le localStorage
+      localStorage.setItem('equipes', JSON.stringify(this.equipes))
+
+      return {success: true, message: "L'équipe a été ajoutée avec succès"}
     },
 
     /**
@@ -342,8 +301,9 @@ export const useScoreStore = defineStore('score', {
      * @param match à ajouter
      * @returns {{success: boolean, message: string}} retourne un message de succès ou d'erreur
      */
-    async addMatch(match) {
+    addMatch(match) {
       const checkMatch = this.checkMatch(match)
+
       // Check des données
       if (!checkMatch.success) {
         return checkMatch
@@ -359,31 +319,12 @@ export const useScoreStore = defineStore('score', {
 
       match.id = uuidv4()
 
-      const matchSend = {
-        id: match.id,
-        jeu: match.jeu,
-        equipe1: this.getIdEquipeByName(match.equipes[0].name),
-        score1: match.equipes[0].score,
-        equipe2: this.getIdEquipeByName(match.equipes[1].name),
-        score2: match.equipes[1].score
-      }
+      this.matchs.push(match)
 
-      // Requête de l'API
-      try {
-        console.log(JSON.stringify(matchSend))
-        const response = await axios.post(`${this.apiUrl}/matchs`, matchSend, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        if (response.status === 201) {
-          this.matchs.push(match)
-          return {success: true, message: "Match ajouté avec succès !"}
-        }
-      } catch (e) {
-        console.error("Erreur dans l'ajout du match : ", e)
-        return {success: false, message: "Erreur lors de l'ajout du match"}
-      }
+      // Enregistrement des matchs dans le localStorage
+      localStorage.setItem('matchs', JSON.stringify(this.matchs))
+
+      return {success: true, message: "Match ajouté avec succès !"}
     },
 
     /**
@@ -391,7 +332,7 @@ export const useScoreStore = defineStore('score', {
      * @param nouveauScore nouveau match
      * @param id du match à mofifier
      */
-    async modifierScore(nouveauScore, id) {
+    modifierScore(nouveauScore, id) {
 
       if (!nouveauScore.score1 === null || !nouveauScore.score2 === null ||
         !nouveauScore.score1 === undefined || !nouveauScore.score2 === undefined) {
@@ -399,26 +340,18 @@ export const useScoreStore = defineStore('score', {
       }
 
       // Envoie de la requête à l'API
-      try {
-        // Requete à l'API
-        const response = await axios.put(`${this.apiUrl}/matchs/${id}`, nouveauScore)
-
-        // Recherche de l'index du match
-        let indexMatch = this.matchs.findIndex(match => match.id === id)
-        console.log("Index du match : ", indexMatch)
-        if (indexMatch !== -1) {
-          // Modification du score localement dans le store
-          this.matchs[indexMatch].equipes[0].score = nouveauScore.score1
-          this.matchs[indexMatch].equipes[1].score = nouveauScore.score2
-        } else {
-          console.log("Match non trouvé")
-        }
-
-        return {success: true, message: "Le score a été modifié avec succès."}
-      } catch (error) {
-        console.error("Erreur dans le changement du score : ", error)
-        return {success: false, message: "Erreur lors du changement du score."}
+      // Recherche de l'index du match
+      let indexMatch = this.matchs.findIndex(match => match.id === id)
+      console.log("Index du match : ", indexMatch)
+      if (indexMatch !== -1) {
+        // Modification du score localement dans le store
+        this.matchs[indexMatch].equipes[0].score = nouveauScore.score1
+        this.matchs[indexMatch].equipes[1].score = nouveauScore.score2
+      } else {
+        console.log("Match non trouvé")
       }
+
+      return {success: true, message: "Le score a été modifié avec succès."}
     },
 
     /**
@@ -435,21 +368,24 @@ export const useScoreStore = defineStore('score', {
      * @returns {{success: boolean, message: string}} retourne un message de succès ou d'erreur
      */
     deleteEquipe(id) {
-      try {
-        const response = axios.delete(`${this.apiUrl}/equipes/${id}`)
+      // Recherche de l'index de l'équipe
+      let indexEquipe = this.equipes.findIndex(equipe => equipe.id === id)
 
-        // Recherche de l'index de l'équipe
-        let indexEquipe = this.equipes.findIndex(equipe => equipe.id === id)
-        if (indexEquipe !== -1) {
-          console.log("Suppression de l'équipe localement...")
-          this.equipes.splice(indexEquipe, 1)
-        }
-
-        return {success: true, message: "L'équipe a été supprimée avec succès."}
-      } catch (error) {
-        console.error("Erreur lors de la suppression de l'équipe : ", error)
-        return {success: false, message: "Erreur lors de la suppression de l'équipe."}
+      // Supprime tous les matchs de l'équipe
+      for (let currentMatch of this.matchs.filter(match => match.equipes.some(equipe => equipe.name === this.equipes[indexEquipe].name))) {
+        this.deleteMatch(currentMatch.id)
       }
+
+      if (indexEquipe !== -1) {
+        console.log("Suppression de l'équipe localement...")
+        this.equipes.splice(indexEquipe, 1)
+
+        // Enregistrement des équipes dans le localStorage
+        localStorage.setItem('equipes', JSON.stringify(this.equipes))
+      }
+
+
+      return {success: true, message: "L'équipe a été supprimée avec succès."}
     },
 
     /**
@@ -458,22 +394,17 @@ export const useScoreStore = defineStore('score', {
      * @returns {{success: boolean, message: string}} retourne un message de succès ou d'erreur
      */
     deleteMatch(id) {
-      try {
-        // Envoie de la requette à l'API
-        const response = axios.delete(`${this.apiUrl}/matchs/${id}`)
+      // Recherche de l'index du match
+      let indexMatch = this.matchs.findIndex(match => match.id === id)
+      if (indexMatch !== -1) {
+        console.log("Suppression du match localement...")
+        this.matchs.splice(indexMatch, 1)
 
-        // Recherche de l'index du match
-        let indexMatch = this.matchs.findIndex(match => match.id === id)
-        if (indexMatch !== -1) {
-          console.log("Suppression du match localement...")
-          this.matchs.splice(indexMatch, 1)
-        }
-
-        return {success: true, message: "Le match a été supprimé avec succès"}
-      } catch (e) {
-        console.log("Erreur lors de la suppression du match : ", e)
-        return {success: false, message: "Erreur lors de la suppression du match."}
+        // Enregistrement des matchs dans le localStorage
+        localStorage.setItem('matchs', JSON.stringify(this.match))
       }
+
+      return {success: true, message: "Le match a été supprimé avec succès"}
     }
   },
 })

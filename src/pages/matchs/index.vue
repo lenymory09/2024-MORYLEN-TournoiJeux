@@ -14,10 +14,10 @@ const {matchs, jeuxVideos} = storeToRefs(scoreStore)
   <table>
     <tr>
       <th>Jeu</th>
-      <th>Equipe1</th>
-      <th>Score1</th>
-      <th>Score2</th>
-      <th>Equipe2</th>
+      <th>Equipe n°1</th>
+      <th>Score n°1</th>
+      <th>Score n°2</th>
+      <th>Equipe n°2</th>
     </tr>
     <tr
       v-for="match in matchs"
@@ -40,14 +40,14 @@ const {matchs, jeuxVideos} = storeToRefs(scoreStore)
         </td>
         <td>
           <router-link :to="`/matchs/${match.id}`" class="text-decoration-none">
-            {{ match.equipes[1].name }}
-          </router-link>
-        </td>
-        <td>
-          <router-link :to="`/matchs/${match.id}`" class="text-decoration-none">
             {{ match.equipes[1].score }}
           </router-link>
-        </td>
+          </td>
+      <td>
+        <router-link :to="`/matchs/${match.id}`" class="text-decoration-none">
+          {{ match.equipes[1].name }}
+        </router-link>
+      </td>
     </tr>
 
   </table>
