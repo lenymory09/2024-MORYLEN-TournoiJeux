@@ -2,7 +2,6 @@
 const items = [
   { path: '/', title: 'Classement' },
   { path: '/matchs', title: 'Matchs' },
-  { path: '/jeu', title: 'Jeux' },
 ]
 </script>
 

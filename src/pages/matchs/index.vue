@@ -11,23 +11,61 @@ const {matchs, jeuxVideos} = storeToRefs(scoreStore)
   <h1 class="d-inline mr-3">Matchs</h1>
   <!-- bouton pour ajouter un match -->
   <v-btn class="bg-cyan te mb-3" icon to="/matchs/add"><b>+</b></v-btn>
-  <v-list lines="two">
-    <v-list-item
-      class="mb-5"
+  <table>
+    <tr>
+      <th>Jeu</th>
+      <th>Equipe1</th>
+      <th>Score1</th>
+      <th>Score2</th>
+      <th>Equipe2</th>
+    </tr>
+    <tr
       v-for="match in matchs"
       :key="match.id"
     >
-      <v-list-item-title>
-        <router-link :to="`/matchs/${match.id}`" class="pa-5 text-decoration-none">
-          {{ jeuxVideos.find(jeu => jeu.id === match.jeu).name }} -
-          {{ match.equipes[0].name }} : {{ match.equipes[0].score }} -
-          {{ match.equipes[1].name }} : {{ match.equipes[1].score }}
-        </router-link>
-      </v-list-item-title>
-    </v-list-item>
-  </v-list>
+        <td>
+          <router-link :to="`/matchs/${match.id}`" class="text-decoration-none">
+            {{ jeuxVideos.find(jeu => jeu.id === match.jeu).name }}
+          </router-link>
+        </td>
+        <td>
+          <router-link :to="`/matchs/${match.id}`" class="text-decoration-none">
+            {{ match.equipes[0].name }}
+          </router-link>
+        </td>
+        <td>
+          <router-link :to="`/matchs/${match.id}`" class="text-decoration-none">
+            {{ match.equipes[0].score }}
+          </router-link>
+        </td>
+        <td>
+          <router-link :to="`/matchs/${match.id}`" class="text-decoration-none">
+            {{ match.equipes[1].name }}
+          </router-link>
+        </td>
+        <td>
+          <router-link :to="`/matchs/${match.id}`" class="text-decoration-none">
+            {{ match.equipes[1].score }}
+          </router-link>
+        </td>
+    </tr>
+
+  </table>
 </template>
 
 <style scoped lang="sass">
+h1
+  margin-top: 30px
+  margin-bottom: 30px
+  font-size: 3rem
 
+table
+  font-family: arial, sans-serif
+  border-collapse: collapse
+  width: 100%
+
+td, th
+  border: 1px solid #dddddd
+  text-align: left
+  padding: 8px
 </style>

@@ -3,15 +3,21 @@
   <v-btn class="bg-cyan te mb-3" icon to="/equipes/add"><b>+</b></v-btn>
 
   <!-- Classement des équipes -->
-  <v-list lines="two">
-    <v-list-item
-      class="mb-5"
-      v-for="equipe in equipes"
+  <table>
+    <tr>
+      <th>#</th>
+      <th>Nom de l'équipe</th>
+      <th>Nombres de points</th>
+    </tr>
+    <tr
+      v-for="(equipe, index) in equipes"
       :key="equipe.id"
     >
-      <v-list-item-title>{{ equipe.name }} - {{ equipe.nbPoints }} points.</v-list-item-title>
-    </v-list-item>
-  </v-list>
+      <td>{{ index + 1 }}</td>
+      <td>{{ equipe.name }}</td>
+      <td>{{ equipe.nbPoints }} points</td>
+    </tr>
+  </table>
 </template>
 
 <script setup>
@@ -19,9 +25,10 @@ import {useScoreStore} from "@/stores/scoreStore"
 import {computed} from "vue"
 
 const scoreStore = useScoreStore()
-const { getEquipesSortedByScore } = scoreStore
+const {getEquipesSortedByScore} = scoreStore
 const equipes = computed(() => getEquipesSortedByScore)
 </script>
 
 <style>
+
 </style>

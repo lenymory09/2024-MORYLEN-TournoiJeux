@@ -71,7 +71,7 @@ export const useScoreStore = defineStore('score', {
   state: () => ({
     equipes: [],
     matchs: [],
-    jeuxVideos,
+    jeuxVideos: [],
     selectedJeu: {},
     selectedMatch: {},
     selectedEquipe: {},
@@ -280,26 +280,29 @@ export const useScoreStore = defineStore('score', {
      */
     async addEquipe(equipe) {
       if (!equipe.name) {
+        console.log("Le nom ne peut pas être vide")
         return {success: false, message: "Le nom ne peut pas être vide"}
       }
 
-      try {
-        // Ajout d'un id à l'équipe
-        equipe.id = uuidv4()
-        const response = await axios.post(`${this.apiUrl}/equipes`, equipe, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
+      if (this.equipes.some(equipeEl => equipeEl.name.toLowerCase() === equipe.name.toLowerCase())) {
+        console.log("L'équipe existe déjà")
+        return {success: false, message: "L'équipe existe déjà"}
+      }
 
-        if (response.status === 201) {
-          this.equipes.push(equipe)
-          return {success: true, message: "L'équipe a été ajoutée avec succès"}
+      // Ajout d'un id à l'équipe
+      equipe.id = uuidv4()
+
+      return await axios.post(`${this.apiUrl}/equipes`, equipe, {
+        headers: {
+          'Content-Type': 'application/json'
         }
-      } catch (error) {
+      }).then(response => {
+        this.equipes.push(equipe)
+        return {success: true, message: "L'équipe a été ajoutée avec succès"}
+      }).catch(error => {
         console.error('Erreur lors de l\'ajout de l\'équipe :', JSON.stringify(error))
         return {success: false, message: "Erreur lors de l'ajout de l'équipe"}
-      }
+      })
     },
 
     /**
@@ -342,7 +345,7 @@ export const useScoreStore = defineStore('score', {
     async addMatch(match) {
       const checkMatch = this.checkMatch(match)
       // Check des données
-      if (!checkMatch.success){
+      if (!checkMatch.success) {
         return checkMatch
       }
 
