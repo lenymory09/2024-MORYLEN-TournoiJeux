@@ -434,9 +434,9 @@ export const useScoreStore = defineStore('score', {
      * @param id de l'équipe à supprimer
      * @returns {{success: boolean, message: string}} retourne un message de succès ou d'erreur
      */
-    deleteEquipe(id) {
+    async deleteEquipe(id) {
       try {
-        const response = axios.delete(`${this.apiUrl}/equipes/${id}`)
+        const response = await axios.delete(`${this.apiUrl}/equipes/${id}`)
 
         // Recherche de l'index de l'équipe
         let indexEquipe = this.equipes.findIndex(equipe => equipe.id === id)
@@ -457,10 +457,10 @@ export const useScoreStore = defineStore('score', {
      * @param id du match à supprimer
      * @returns {{success: boolean, message: string}} retourne un message de succès ou d'erreur
      */
-    deleteMatch(id) {
+    async deleteMatch(id) {
       try {
         // Envoie de la requette à l'API
-        const response = axios.delete(`${this.apiUrl}/matchs/${id}`)
+        const response = await axios.delete(`${this.apiUrl}/matchs/${id}`)
 
         // Recherche de l'index du match
         let indexMatch = this.matchs.findIndex(match => match.id === id)
