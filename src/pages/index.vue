@@ -24,7 +24,6 @@
 <script setup>
 import {useScoreStore} from "@/stores/scoreStore"
 import {computed} from "vue"
-import {storeToRefs} from "pinia"
 
 const scoreStore = useScoreStore()
 const {getEquipesSortedByScore} = scoreStore
@@ -34,6 +33,7 @@ const equipes = computed(() => {
 
 const deleteEquipe = async (id) => {
   await scoreStore.deleteEquipe(id)
+  open('.')
 }
 </script>
 
