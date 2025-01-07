@@ -8,45 +8,45 @@
       <th>#</th>
       <th>Nom de l'équipe</th>
       <th>Nombres de points</th>
+      <th></th>
     </tr>
     <tr
-      v-for="(equipe, index) in equipes"
+      v-for="(equipe, index) in scoreStore.getEquipesSortedByScore"
       :key="equipe.id"
     >
-      <td>{{ index + 1 }}</td>
+      <td class="text-center">{{ index + 1 }}</td>
       <td>{{ equipe.name }}</td>
       <td>{{ equipe.nbPoints }} points</td>
-      <v-btn icon="mdi-delete" class="bg-red" @click="dialog = true" />
-
-      <v-dialog
-        v-model="dialog"
-        width="auto"
-      >
-        <v-card
-          max-width="400"
-          prepend-icon="mdi-update"
-          text="Êtes vous sûr de vouloir supprimer l'équipe ? (Cette action supprime aussi les matchs que l'équipe a joué)"
-          title="Confirmation"
-        >
-          <template v-slot:actions>
-            <v-btn
-              class="bg-green"
-              @click="deleteEquipe(equipe.id)"
-            >
-              Oui
-            </v-btn>
-
-            <v-btn
-              class="bg-red"
-              @click="dialog = false"
-            >
-              Non
-            </v-btn>
-          </template>
-        </v-card>
-      </v-dialog>
+      <td class="text-center"><v-btn icon="mdi-delete" class="bg-red" @click="confirmerChoix(equipe.id)" /></td>
     </tr>
   </table>
+  <v-dialog
+    v-model="dialog"
+    width="auto"
+  >
+    <v-card
+      max-width="400"
+      prepend-icon="mdi-update"
+      text="Êtes vous sûr de vouloir supprimer l'équipe ? (Cette action supprime aussi les matchs que l'équipe a joué)"
+      title="Confirmation"
+    >
+      <template v-slot:actions>
+        <v-btn
+          class="bg-green"
+          @click="deleteEquipe(equipeChoisi)"
+        >
+          Oui
+        </v-btn>
+
+        <v-btn
+          class="bg-red"
+          @click="dialog = false"
+        >
+          Non
+        </v-btn>
+      </template>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
@@ -56,16 +56,19 @@ import router from "@/router";
 
 const scoreStore = useScoreStore()
 const {getEquipesSortedByScore} = scoreStore
-const equipes = computed(() => {
-  return getEquipesSortedByScore
-})
 
 const deleteEquipe = (id) => {
   scoreStore.deleteEquipe(id)
-  open(".")
+  dialog.value = false
 }
 
 const dialog = ref(false)
+const equipeChoisi = ref(null)
+
+const confirmerChoix = (id) => {
+  equipeChoisi.value = id
+  dialog.value = true
+}
 </script>
 
 <style>

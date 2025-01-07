@@ -22,29 +22,30 @@ const {matchs, jeuxVideos} = storeToRefs(scoreStore)
     <tr
       v-for="match in matchs"
       :key="match.id"
+      class="text-decoration-none"
     >
-        <td>
-          <router-link :to="`/matchs/${match.id}`" class="text-decoration-none">
-            {{ jeuxVideos.find(jeu => jeu.id === match.jeu).name }}
-          </router-link>
-        </td>
-        <td>
-          <router-link :to="`/matchs/${match.id}`" class="text-decoration-none">
-            {{ match.equipes[0].name }}
-          </router-link>
-        </td>
-        <td>
-          <router-link :to="`/matchs/${match.id}`" class="text-decoration-none">
-            {{ match.equipes[0].score }}
-          </router-link>
-        </td>
-        <td>
-          <router-link :to="`/matchs/${match.id}`" class="text-decoration-none">
-            {{ match.equipes[1].score }}
-          </router-link>
-          </td>
       <td>
-        <router-link :to="`/matchs/${match.id}`" class="text-decoration-none">
+        <router-link :to="`/matchs/${match.id}`" class="tableau-match_cellule">
+          {{ jeuxVideos.find(jeu => jeu.id === match.jeu).name }}
+        </router-link>
+      </td>
+      <td>
+        <router-link :to="`/matchs/${match.id}`" class="tableau-match_cellule">
+          {{ match.equipes[0].name }}
+        </router-link>
+      </td>
+      <td class="text-center">
+        <router-link :to="`/matchs/${match.id}`" class="tableau-match_cellule">
+          {{ match.equipes[0].score }}
+        </router-link>
+      </td>
+      <td class="text-center">
+        <router-link :to="`/matchs/${match.id}`" class="tableau-match_cellule">
+          {{ match.equipes[1].score }}
+        </router-link>
+      </td>
+      <td>
+        <router-link :to="`/matchs/${match.id}`" class="tableau-match_cellule">
           {{ match.equipes[1].name }}
         </router-link>
       </td>
@@ -62,10 +63,23 @@ h1
 table
   font-family: arial, sans-serif
   border-collapse: collapse
-  width: 100%
 
-td, th
+th, td
   border: 1px solid #dddddd
   text-align: left
+
+td
+  padding: 0
+
+.tableau-match_cellule
+  width: 100%
+  height: 100%
   padding: 8px
+  color: white
+  text-decoration: none
+  display: inline-block
+  font-size: 16px
+
+tr:hover:not(tr:first-child)
+  border: 2px white solid
 </style>
