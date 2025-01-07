@@ -20,20 +20,20 @@
 </style>
 
 <script setup>
-// Importattion des fonctions et variables nécessaires
+// Importation des fonctions et variables nécessaires
 import {ref} from "vue"
 import router from "@/router";
 
 import { useScoreStore } from "@/stores/scoreStore"
 const scoreStore = useScoreStore()
-const { addEquipe : add } = scoreStore
+const { addEquipe } = scoreStore
 
 const response = ref(null)
 
 const equipe = ref({name: ""})
 
 const ajouterEquipe = async () => {
-  response.value = await add(equipe.value)
+  response.value = await addEquipe(equipe.value)
   console.log(JSON.stringify(response.value))
 
   if (response.value && response.value.success) {

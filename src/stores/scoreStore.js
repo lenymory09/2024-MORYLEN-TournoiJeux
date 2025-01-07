@@ -14,7 +14,7 @@ import {v4 as uuidv4} from 'uuid' // Librairie pour générer des identifiants u
   {
     id: '3',
     name: "Equipe 3",
-  },
+  },<
   {
     id: '4',
     name: "Equipe 4",
@@ -197,11 +197,10 @@ export const useScoreStore = defineStore('score', {
     async fetchMatchs() {
       this.isLoading = true
       try {
-        const response = await axios.get(`${this.apiUrl}/matchs`)
-        if (response.status === 200) {
-          this.matchs = response.data
+        await axios.get(`${this.apiUrl}/matchs`).then(response => {
           console.log("Matchs chargés avec succès")
-        }
+          this.matchs = response.data
+        })
       } catch (error) {
         console.error("Erreur dans le chargement des matchs :", error)
       } finally {
@@ -233,7 +232,14 @@ export const useScoreStore = defineStore('score', {
      * @returns {{name: string, id: number} | {name: string, id: number}}
      */
     selectJeuById(id) {
-      this.selectedJeu = this.jeuxVideos.find(jeu => jeu.id === id)
+      const jeuCourrant = this.jeuxVideos.find(jeu => jeu.id === id)
+      if (jeuCourrant) {
+        this.selectedJeu = jeuCourrant
+        return true
+      } else {
+        this.selectedJeu = null
+        return false
+      }
     },
 
     /**
@@ -423,6 +429,7 @@ export const useScoreStore = defineStore('score', {
 
     /**
      * @param name nom de l'équipe
+     * @returns {string} l'id de l'équipe
      */
     getIdEquipeByName(name) {
       // cherche l'id de l'équipe avec le nom passé en parametre.
@@ -438,11 +445,14 @@ export const useScoreStore = defineStore('score', {
       try {
         const response = await axios.delete(`${this.apiUrl}/equipes/${id}`)
 
+        console.log("data : ", response.data)
+
         // Recherche de l'index de l'équipe
         let indexEquipe = this.equipes.findIndex(equipe => equipe.id === id)
         if (indexEquipe !== -1) {
-          console.log("Suppression de l'équipe localement...")
+          console.log("Suppression de l'équipe localement...", indexEquipe)
           this.equipes.splice(indexEquipe, 1)
+          console.log(this.equipes)
         }
 
         return {success: true, message: "L'équipe a été supprimée avec succès."}

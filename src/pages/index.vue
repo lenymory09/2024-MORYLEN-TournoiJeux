@@ -8,33 +8,79 @@
       <th>#</th>
       <th>Nom de l'équipe</th>
       <th>Nombres de points</th>
+      <th></th>
     </tr>
     <tr
-      v-for="(equipe, index) in equipes"
+      v-for="(equipe, index) in scoreStore.getEquipesSortedByScore"
       :key="equipe.id"
-      @dblclick="deleteEquipe(equipe.id)"
     >
       <td>{{ index + 1 }}</td>
       <td>{{ equipe.name }}</td>
       <td>{{ equipe.nbPoints }} points</td>
+
+      <td><v-btn icon class="bg-red" @click="confirmerChoix(equipe.id)"><v-icon>mdi-delete</v-icon></v-btn></td>
     </tr>
   </table>
+
+  <v-dialog
+    v-model="dialog"
+    width="auto"
+  >
+    <v-card
+      max-width="400"
+      prepend-icon="mdi-update"
+      text="Êtes vous sûr de vouloir supprimer l'équipe ? (Cette action supprime aussi les matchs que l'équipe a joué)"
+      title="Confirmation"
+    >
+      <template v-slot:actions>
+        <v-btn
+          class="bg-green"
+          @click="deleteEquipe(idEquipeChoisi)"
+        >
+          Oui
+        </v-btn>
+
+        <v-btn
+          class="bg-red"
+          @click="dialog = false"
+        >
+          Non
+        </v-btn>
+      </template>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
 import {useScoreStore} from "@/stores/scoreStore"
-import {computed} from "vue"
 
 const scoreStore = useScoreStore()
-const {getEquipesSortedByScore} = scoreStore
-const equipes = computed(() => {
-  return getEquipesSortedByScore
-})
 
+/**
+ * Supprime une équipe
+ * @param id de l'équipe à supprimer
+ * @returns {Promise<void>}
+ */
 const deleteEquipe = async (id) => {
+  console.log("suppression de l'équipe avec l'id : ", id)
   await scoreStore.deleteEquipe(id)
-  open('.')
+  dialog.value = false
 }
+
+const dialog = ref(false)
+const idEquipeChoisi = ref(null)
+
+/**
+ * Confirme le choix pour supprimer l'équipe
+ * @param id de l'équipe à supprimer
+ */
+const confirmerChoix = (id) => {
+  console.log("équipe choisie : ", id)
+  idEquipeChoisi.value = id
+  dialog.value = true
+}
+
+
 </script>
 
 <style>
