@@ -49,4 +49,7 @@
 
     &:hover
       color: rgba(25, 118, 210, 1)
+
+  p
+    font-size: 2rem
 </style>

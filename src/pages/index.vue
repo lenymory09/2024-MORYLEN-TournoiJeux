@@ -14,11 +14,10 @@
       v-for="(equipe, index) in scoreStore.getEquipesSortedByScore"
       :key="equipe.id"
     >
-      <td>{{ index + 1 }}</td>
+      <td class="text-center">{{ index + 1 }}</td>
       <td>{{ equipe.name }}</td>
       <td>{{ equipe.nbPoints }} points</td>
-
-      <td><v-btn icon class="bg-red" @click="confirmerChoix(equipe.id)"><v-icon>mdi-delete</v-icon></v-btn></td>
+      <td class="text-center"><v-btn icon class="bg-red" @click="confirmerChoix(equipe.id)"><v-icon>mdi-delete</v-icon></v-btn></td>
     </tr>
   </table>
 
@@ -84,5 +83,13 @@ const confirmerChoix = (id) => {
 </script>
 
 <style>
+table {
+  margin-bottom: 30px;
+}
 
+th, td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
 </style>
