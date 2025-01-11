@@ -8,16 +8,7 @@
 </template>
 
 <script setup>
-import {onMounted} from "vue"
-import {useScoreStore} from "@/stores/scoreStore"
 import AppHeader from "@/components/AppHeader.vue"
-
-onMounted(async () => {
-  const scoreStore = useScoreStore()
-  await scoreStore.fetchEquipes()
-  await scoreStore.fetchMatchs()
-  await scoreStore.fetchJeux()
-})
 </script>
 
 <style lang="sass">
