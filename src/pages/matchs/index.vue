@@ -32,11 +32,9 @@ const {matchs, jeuxVideos} = storeToRefs(scoreStore)
         {{ match.equipes[0].score }}
       </td>
       <td class="text-center">
-        <router-link :to="`/matchs/${match.id}`" class="tableau-match_cellule">
           {{ match.equipes[1].score }}
-        </router-link>
       </td>
-      <td>
+      <td class="tableau-match_cellule">
         {{ match.equipes[1].name }}
       </td>
     </tr>
@@ -57,19 +55,4 @@ table
 th, td
   border: 1px solid #dddddd
   text-align: left
-
-td
-  padding: 0
-
-.tableau-match_cellule
-  width: 100%
-  height: 100%
-  padding: 8px
-  color: white
-  text-decoration: none
-  display: inline-block
-  font-size: 16px
-
-tr:hover:not(tr:first-child)
-  border: 2px white solid
 </style>
