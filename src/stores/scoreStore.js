@@ -103,7 +103,8 @@ export const useScoreStore = defineStore('score', {
                 nbPoints += 3;
                 // Teste si l'équipe a fait égalité
               } else if (match.equipes[indexEquipe].score === match.equipes[1 - indexEquipe].score) {
-                nbPoints += 1;
+                if (match.equipes[indexEquipe].score !== 0)
+                  nbPoints += 1;
               }
             }
           }
@@ -167,15 +168,13 @@ export const useScoreStore = defineStore('score', {
       try {
         const response = await axios.get(`${this.apiUrl}/equipes`)
         this.equipes = response.data
-
-        // Enregistrement des données dans le local storage
-        localStorage.setItem('equipes', JSON.stringify(this.equipes))
       } catch (error) {
         console.error('Erreur lors du chargement des équipes :', error)
       } finally {
         this.isLoading = false
       }
-    },
+    }
+    ,
 
     /**
      * charge les jeux depuis l'API
@@ -186,15 +185,13 @@ export const useScoreStore = defineStore('score', {
       try {
         const response = await axios.get(`${this.apiUrl}/jeux`)
         this.jeuxVideos = response.data
-
-        // Enregistrement des données dans le local storage
-        localStorage.setItem('jeux', JSON.stringify(this.jeuxVideos))
       } catch (error) {
         console.error('Erreur lors du chargement des jeux :', error)
       } finally {
         this.isLoading = false
       }
-    },
+    }
+    ,
 
     /**
      * charge les matchs dans l'API
@@ -207,15 +204,13 @@ export const useScoreStore = defineStore('score', {
           console.log("Matchs chargés avec succès")
           this.matchs = response.data
         })
-
-        // Enregistrement des données dans le local storage
-        localStorage.setItem('matchs', JSON.stringify(this.matchs))
       } catch (error) {
         console.error("Erreur dans le chargement des matchs :", error)
       } finally {
         this.isLoading = false
       }
-    },
+    }
+    ,
 
     /**
      * retourne le match dont l'id est celui en paramètre
@@ -233,7 +228,8 @@ export const useScoreStore = defineStore('score', {
         this.selectedMatch = null
         return false
       }
-    },
+    }
+    ,
 
     /**
      * retourne le jeu passé en parametre
@@ -249,7 +245,8 @@ export const useScoreStore = defineStore('score', {
         this.selectedJeu = null
         return false
       }
-    },
+    }
+    ,
 
     /**
      * obtenir le nombre de points
@@ -286,7 +283,8 @@ export const useScoreStore = defineStore('score', {
         return -1
       }
       return nbPoints
-    },
+    }
+    ,
 
     /**
      * ajoute une équipe
@@ -313,15 +311,14 @@ export const useScoreStore = defineStore('score', {
         }
       }).then(response => {
         this.equipes.push(equipe)
-        // Enregistrement dans le local storage
-        localStorage.setItem('equipes', JSON.stringify(this.equipes))
 
         return {success: true, message: "L'équipe a été ajoutée avec succès"}
       }).catch(error => {
         console.error('Erreur lors de l\'ajout de l\'équipe :', JSON.stringify(error))
         return {success: false, message: "Erreur lors de l'ajout de l'équipe"}
       })
-    },
+    }
+    ,
 
     /**
      * check si le match est correct
@@ -353,7 +350,8 @@ export const useScoreStore = defineStore('score', {
       }
 
       return {success: true, message: "Le match est correct"}
-    },
+    }
+    ,
 
     /**
      * ajoute un match
@@ -396,15 +394,14 @@ export const useScoreStore = defineStore('score', {
         })
         if (response.status === 201) {
           this.matchs.push(match)
-          // Enregistrement dans le local storage
-          localStorage.setItem('matchs', JSON.stringify(this.matchs))
           return {success: true, message: "Match ajouté avec succès !"}
         }
       } catch (e) {
         console.error("Erreur dans l'ajout du match : ", e)
         return {success: false, message: "Erreur lors de l'ajout du match"}
       }
-    },
+    }
+    ,
 
     /**
      * modifie le score d'un match
@@ -430,9 +427,6 @@ export const useScoreStore = defineStore('score', {
           // Modification du score localement dans le store
           this.matchs[indexMatch].equipes[0].score = nouveauScore.score1
           this.matchs[indexMatch].equipes[1].score = nouveauScore.score2
-
-          // Enregistrement dans le local storage
-          localStorage.setItem('matchs', JSON.stringify(this.matchs))
         } else {
           console.log("Match non trouvé")
         }
@@ -442,7 +436,8 @@ export const useScoreStore = defineStore('score', {
         console.error("Erreur dans le changement du score : ", error)
         return {success: false, message: "Erreur lors du changement du score."}
       }
-    },
+    }
+    ,
 
     /**
      * @param name nom de l'équipe
@@ -451,7 +446,8 @@ export const useScoreStore = defineStore('score', {
     getIdEquipeByName(name) {
       // cherche l'id de l'équipe avec le nom passé en parametre.
       return this.equipes.find(equipe => equipe.name === name).id
-    },
+    }
+    ,
 
     /**
      * Supprime une équipe
@@ -470,9 +466,6 @@ export const useScoreStore = defineStore('score', {
           console.log("Suppression de l'équipe localement...", indexEquipe)
           this.equipes.splice(indexEquipe, 1)
           console.log(this.equipes)
-
-          // Enregistrement dans le local storage
-          localStorage.setItem('equipes', JSON.stringify(this.equipes))
         }
 
         return {success: true, message: "L'équipe a été supprimée avec succès."}
@@ -480,7 +473,8 @@ export const useScoreStore = defineStore('score', {
         console.error("Erreur lors de la suppression de l'équipe : ", error)
         return {success: false, message: "Erreur lors de la suppression de l'équipe."}
       }
-    },
+    }
+    ,
 
     /**
      * Supprime un match
@@ -497,9 +491,6 @@ export const useScoreStore = defineStore('score', {
         if (indexMatch !== -1) {
           console.log("Suppression du match localement...")
           this.matchs.splice(indexMatch, 1)
-
-          // Enregistrement dans le local storage
-          localStorage.setItem('matchs', JSON.stringify(this.matchs))
         }
 
         return {success: true, message: "Le match a été supprimé avec succès"}
@@ -508,5 +499,6 @@ export const useScoreStore = defineStore('score', {
         return {success: false, message: "Erreur lors de la suppression du match."}
       }
     }
-  },
+  }
+  ,
 })
