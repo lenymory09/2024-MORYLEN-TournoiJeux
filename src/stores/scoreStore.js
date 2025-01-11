@@ -1,14 +1,13 @@
 import {defineStore} from "pinia"
-
-const equipes = []
-const jeuxVideos = []
-const matchs = []
+import JSON_equipes from "/public/Equipes.json"
+import JSON_matchs from "/public/Matchs.json"
+import JSON_jeux from "/public/Jeux.json"
 
 export const useScoreStore = defineStore('score', {
   state: () => ({
-    equipes: [],
-    matchs: [],
-    jeuxVideos: [],
+    equipes: JSON_equipes,
+    matchs: JSON_matchs,
+    jeuxVideos: JSON_jeux,
     selectedJeu: {},
     selectedMatch: {},
     selectedEquipe: {},

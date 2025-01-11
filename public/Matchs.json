@@ -1,0 +1,604 @@
+[
+  {
+    "id": "e98a6b16-3b23-48b7-a163-bb2617f1d51b",
+    "jeu": "1",
+    "equipes": [
+      {
+        "name": "Hikaru Opinal",
+        "score": 1
+      },
+      {
+        "name": "Mewing Guys",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "66be7228-9626-401f-b5e5-5b62f67d5e0a",
+    "jeu": "1",
+    "equipes": [
+      {
+        "name": "Super Mario Profs",
+        "score": 0
+      },
+      {
+        "name": "Les Boulangers",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "id": "684ae910-881f-404e-a1e2-421f66d2cce1",
+    "jeu": "1",
+    "equipes": [
+      {
+        "name": "Skibidi Snipers",
+        "score": 1
+      },
+      {
+        "name": "Les Opps",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "4b4a7a4b-b166-46b3-86ef-967e7e97eaeb",
+    "jeu": "1",
+    "equipes": [
+      {
+        "name": "Les Opps",
+        "score": 0
+      },
+      {
+        "name": "Les Boulangers",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "id": "747632a1-43f9-4165-8ad3-46fff13db025",
+    "jeu": "1",
+    "equipes": [
+      {
+        "name": "Brique",
+        "score": 0
+      },
+      {
+        "name": "Équipe 1",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "id": "77c79f96-e74b-483c-bb97-a09c248eca08",
+    "jeu": "1",
+    "equipes": [
+      {
+        "name": "Brique",
+        "score": 1
+      },
+      {
+        "name": "Aucune idée",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "483b3d4e-10b8-4936-826a-4843061756aa",
+    "jeu": "1",
+    "equipes": [
+      {
+        "name": "Team Rocket",
+        "score": 1
+      },
+      {
+        "name": "Mewing Guys",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "89140c34-358e-4487-8dce-83e16848ba8c",
+    "jeu": "1",
+    "equipes": [
+      {
+        "name": "Jérôme et les Ravalopins",
+        "score": 0
+      },
+      {
+        "name": "Skill Issue",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "id": "3cfbfdf9-c41a-42ad-86e1-1b0b8e500c15",
+    "jeu": "1",
+    "equipes": [
+      {
+        "name": "KolaTech",
+        "score": 1
+      },
+      {
+        "name": "Skill Issue",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "id": "8a225acb-dd26-41ca-8daa-136cb3e5769e",
+    "jeu": "1",
+    "equipes": [
+      {
+        "name": "Hikaru Opinal",
+        "score": 1
+      },
+      {
+        "name": "Jérôme et les Ravalopins",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "31995a81-0451-41be-b977-4b0c78c08b04",
+    "jeu": "1",
+    "equipes": [
+      {
+        "name": "Les Autistic Players",
+        "score": 1
+      },
+      {
+        "name": "Les Shock and Rawr",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "94798a40-21b5-439a-a462-ebaf0c2a68a4",
+    "jeu": "1",
+    "equipes": [
+      {
+        "name": "XP Hunter",
+        "score": 0
+      },
+      {
+        "name": "Les Rejetés",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "id": "b4f67601-e0c0-4f4e-95eb-d1236e798f68",
+    "jeu": "1",
+    "equipes": [
+      {
+        "name": "Les Shock and Rawr",
+        "score": 0
+      },
+      {
+        "name": "Les Rejetés",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "id": "2d04f7f4-4a94-4a48-8eb7-332e742997ef",
+    "jeu": "1",
+    "equipes": [
+      {
+        "name": "Équipe 4",
+        "score": 0
+      },
+      {
+        "name": "KolaTech",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "id": "c44a2d9f-24f0-4e20-9f0a-e56944effdfd",
+    "jeu": "1",
+    "equipes": [
+      {
+        "name": "Team Rocket",
+        "score": 0
+      },
+      {
+        "name": "Skibidi Snipers",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "id": "1f918180-8e4c-4be7-a184-4cd0b97be851",
+    "jeu": "1",
+    "equipes": [
+      {
+        "name": "Aucune idée",
+        "score": 0
+      },
+      {
+        "name": "Super Mario Profs",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "id": "1f8e4df8-a325-4767-a0b9-d6695bc015f0",
+    "jeu": "1",
+    "equipes": [
+      {
+        "name": "Les Autistic Players",
+        "score": 1
+      },
+      {
+        "name": "XP Hunter",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "c9336c95-9361-4f51-92f0-f76587e8636f",
+    "jeu": "1",
+    "equipes": [
+      {
+        "name": "Équipe 1",
+        "score": 0
+      },
+      {
+        "name": "Équipe 4",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "id": "b1f5849e-7ec0-4fe7-8cb9-f19699a7f26c",
+    "jeu": "2",
+    "equipes": [
+      {
+        "name": "Brique",
+        "score": 2
+      },
+      {
+        "name": "Jérôme et les Ravalopins",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "id": "b911bc5b-6cc1-4830-b6fc-44d3c4221576",
+    "jeu": "2",
+    "equipes": [
+      {
+        "name": "Team Rocket",
+        "score": 2
+      },
+      {
+        "name": "Les Autistic Players",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "id": "c27653b4-c641-4376-9c8d-683fa09e285c",
+    "jeu": "2",
+    "equipes": [
+      {
+        "name": "Team Rocket",
+        "score": 2
+      },
+      {
+        "name": "KolaTech",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "80c7efa8-9b23-491d-a4d3-c38682ca3a67",
+    "jeu": "2",
+    "equipes": [
+      {
+        "name": "Les Autistic Players",
+        "score": 2
+      },
+      {
+        "name": "Skibidi Snipers",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "dda350ba-858b-4742-8e66-ccef0f159c32",
+    "jeu": "2",
+    "equipes": [
+      {
+        "name": "Mewing Guys",
+        "score": 2
+      },
+      {
+        "name": "Super Mario Profs",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "e8ee834b-fad3-4c6e-b4b0-c7cd7a480a39",
+    "jeu": "2",
+    "equipes": [
+      {
+        "name": "Aucune idée",
+        "score": 2
+      },
+      {
+        "name": "Les Rejetés",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "0f3c3970-8ea7-45a0-a973-730fd1c6a624",
+    "jeu": "2",
+    "equipes": [
+      {
+        "name": "Super Mario Profs",
+        "score": 0
+      },
+      {
+        "name": "Équipe 4",
+        "score": 2
+      }
+    ]
+  },
+  {
+    "id": "61159bc2-132a-4f16-9b7a-eeb38dfc7f50",
+    "jeu": "2",
+    "equipes": [
+      {
+        "name": "Les Shock and Rawr",
+        "score": 2
+      },
+      {
+        "name": "Skill Issue",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "id": "51ed26ef-dcfd-4641-a27a-b379563a2635",
+    "jeu": "2",
+    "equipes": [
+      {
+        "name": "Équipe 4",
+        "score": 2
+      },
+      {
+        "name": "Les Boulangers",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "4fdf614a-7297-4dea-897b-a69e55aefcfe",
+    "jeu": "2",
+    "equipes": [
+      {
+        "name": "Hikaru Opinal",
+        "score": 2
+      },
+      {
+        "name": "XP Hunter",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "198375bd-ea1a-4822-a493-ed76036f4b88",
+    "jeu": "2",
+    "equipes": [
+      {
+        "name": "Skibidi Snipers",
+        "score": 2
+      },
+      {
+        "name": "Aucune idée",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "49896e2b-adca-4f57-bd84-5f560d1e37f5",
+    "jeu": "2",
+    "equipes": [
+      {
+        "name": "Jérôme et les Ravalopins",
+        "score": 1
+      },
+      {
+        "name": "Équipe 1",
+        "score": 2
+      }
+    ]
+  },
+  {
+    "id": "1add06fe-effd-46f2-b765-085b09d4e5f8",
+    "jeu": "2",
+    "equipes": [
+      {
+        "name": "Équipe 1",
+        "score": 1
+      },
+      {
+        "name": "Skill Issue",
+        "score": 2
+      }
+    ]
+  },
+  {
+    "id": "1d1e703c-4c4d-4fa7-9b6f-f797012a88b5",
+    "jeu": "2",
+    "equipes": [
+      {
+        "name": "Les Rejetés",
+        "score": 1
+      },
+      {
+        "name": "Brique",
+        "score": 2
+      }
+    ]
+  },
+  {
+    "id": "28120a9d-fb9d-4ce9-8a07-5e174a24aeeb",
+    "jeu": "2",
+    "equipes": [
+      {
+        "name": "Les Opps",
+        "score": 2
+      },
+      {
+        "name": "Les Boulangers",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "2abd90ed-9212-43a8-acf1-c4d49ec1dfc6",
+    "jeu": "2",
+    "equipes": [
+      {
+        "name": "XP Hunter",
+        "score": 0
+      },
+      {
+        "name": "Mewing Guys",
+        "score": 2
+      }
+    ]
+  },
+  {
+    "id": "2b914e1b-d80f-4e44-96b3-ad117f546906",
+    "jeu": "2",
+    "equipes": [
+      {
+        "name": "Hikaru Opinal",
+        "score": 2
+      },
+      {
+        "name": "KolaTech",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "2d4c016b-4919-4822-a7c5-44d2e9ed40cb",
+    "jeu": "2",
+    "equipes": [
+      {
+        "name": "Les Shock and Rawr",
+        "score": 2
+      },
+      {
+        "name": "Les Opps",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "id": "a842d036-589e-4052-b8fb-dcf56465d94c",
+    "jeu": "3",
+    "equipes": [
+      {
+        "name": "Hikaru Opinal",
+        "score": 1
+      },
+      {
+        "name": "Team Rocket",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "f3d377c2-a1a1-4e77-b04e-528b38bc8a99",
+    "jeu": "3",
+    "equipes": [
+      {
+        "name": "Mewing Guys",
+        "score": 1
+      },
+      {
+        "name": "Jérôme et les Ravalopins",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "0020c9b2-44c8-4c82-beb4-51130b3fb9ad",
+    "jeu": "3",
+    "equipes": [
+      {
+        "name": "KolaTech",
+        "score": 0
+      },
+      {
+        "name": "Skibidi Snipers",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "id": "d5ace513-d6a4-4f5d-bf39-b408bb939395",
+    "jeu": "3",
+    "equipes": [
+      {
+        "name": "Les Autistic Players",
+        "score": 1
+      },
+      {
+        "name": "XP Hunter",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "5e69038f-9bad-489e-b18a-9156b4a40670",
+    "jeu": "3",
+    "equipes": [
+      {
+        "name": "Brique",
+        "score": 0
+      },
+      {
+        "name": "Les Shock and Rawr",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "id": "9c46c8a9-1cb2-43f4-b24e-eb2bc4f8df64",
+    "jeu": "3",
+    "equipes": [
+      {
+        "name": "Équipe 1",
+        "score": 1
+      },
+      {
+        "name": "Super Mario Profs",
+        "score": 0
+      }
+    ]
+  },
+  {
+    "id": "445d67ca-3cf8-408b-bf3d-389d5317972b",
+    "jeu": "3",
+    "equipes": [
+      {
+        "name": "Les Opps",
+        "score": 0
+      },
+      {
+        "name": "Aucune idée",
+        "score": 1
+      }
+    ]
+  }
+]

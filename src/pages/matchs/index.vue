@@ -9,8 +9,6 @@ const {matchs, jeuxVideos} = storeToRefs(scoreStore)
 
 <template>
   <h1 class="d-inline mr-3">Matchs</h1>
-  <!-- bouton pour ajouter un match -->
-  <v-btn class="bg-cyan te mb-3" icon to="/matchs/add"><b>+</b></v-btn>
   <table>
     <tr>
       <th>Jeu</th>
@@ -24,31 +22,23 @@ const {matchs, jeuxVideos} = storeToRefs(scoreStore)
       :key="match.id"
       class="text-decoration-none"
     >
-        <td>
-          <router-link :to="`/matchs/${match.id}`" class="tableau-match_cellule">
-            {{ jeuxVideos.find(jeu => jeu.id === match.jeu).name }}
-          </router-link>
-        </td>
-        <td>
-          <router-link :to="`/matchs/${match.id}`" class="tableau-match_cellule">
-            {{ match.equipes[0].name }}
-          </router-link>
-        </td>
-        <td class="text-center">
-          <router-link :to="`/matchs/${match.id}`" class="tableau-match_cellule">
-            {{ match.equipes[0].score }}
-          </router-link>
-        </td>
+      <td>
+        {{ jeuxVideos.find(jeu => jeu.id === match.jeu).name }}
+      </td>
+      <td>
+        {{ match.equipes[0].name }}
+      </td>
+      <td class="text-center">
+        {{ match.equipes[0].score }}
+      </td>
       <td class="text-center">
         <router-link :to="`/matchs/${match.id}`" class="tableau-match_cellule">
           {{ match.equipes[1].score }}
         </router-link>
       </td>
       <td>
-          <router-link :to="`/matchs/${match.id}`" class="tableau-match_cellule">
-            {{ match.equipes[1].name }}
-          </router-link>
-        </td>
+        {{ match.equipes[1].name }}
+      </td>
     </tr>
 
   </table>
