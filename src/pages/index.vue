@@ -1,5 +1,5 @@
 <template>
-  <h1 class="d-inline mr-3">Classemement des équipes</h1>
+  <h1 class="mr-3">Classemement des équipes</h1>
 
   <!-- Classement des équipes -->
   <table>
@@ -20,14 +20,11 @@
 </template>
 
 <script setup>
-import { useScoreStore } from "@/stores/scoreStore";
+import { useScoreStore } from "@/stores/scoreStore"
 const scoreStore = useScoreStore()
 </script>
-<style>
-table {
-  margin-bottom: 30px;
-}
 
+<style>
 th, td {
   border: 1px solid #dddddd;
   text-align: left;

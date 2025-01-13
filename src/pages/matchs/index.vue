@@ -8,7 +8,7 @@ const {matchs, jeuxVideos} = storeToRefs(scoreStore)
 </script>
 
 <template>
-  <h1 class="d-inline mr-3">Matchs</h1>
+  <h1 class="mr-3">Matchs</h1>
   <table>
     <tr>
       <th>Jeu</th>

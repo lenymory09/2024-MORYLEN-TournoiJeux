@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <app-header/>
-    <v-main width="1000px" class="mr-auto ml-auto">
+    <v-main width="1000px" class="mx-auto">
       <router-view/>
     </v-main>
   </v-app>
@@ -9,14 +9,6 @@
 
 <script setup>
 import AppHeader from "@/components/AppHeader.vue"
-import { useScoreStore } from "@/stores/scoreStore"
-import { onMounted } from "vue"
-const scoreStore = useScoreStore()
-onMounted(() => {
-  console.log(scoreStore.jeuxVideos)
-  console.log(scoreStore.matchs)
-  console.log(scoreStore.equipes)
-})
 </script>
 
 <style lang="sass">
@@ -29,6 +21,7 @@ table
   font-family: arial, sans-serif
   border-collapse: collapse
   width: 100%
+  margin-bottom: 100px
 
 td, th
   border: 1px solid #dddddd

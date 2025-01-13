@@ -8,9 +8,6 @@ export const useScoreStore = defineStore('score', {
     equipes: JSON_equipes,
     matchs: JSON_matchs,
     jeuxVideos: JSON_jeux,
-    selectedJeu: {},
-    selectedMatch: {},
-    selectedEquipe: {},
   }),
   getters: {
     /**
@@ -62,25 +59,5 @@ export const useScoreStore = defineStore('score', {
       console.log("équipes triées : ", JSON.stringify(sortedEquipes))
       return sortedEquipes
     },
-  },
-  actions: {
-    /**
-     * retourne le match dont l'id est celui en paramètre
-     * @param id du match
-     * @returns vrai si le match existe et faux sinon
-     */
-    selectMatchById(id) {
-      // recherche l'index du match
-      const matchCourrant = this.matchs.find(match => match.id === id)
-      if (matchCourrant) {
-        console.log("Recherche de l'index du match...")
-        this.selectedMatch = matchCourrant
-        return true
-      } else {
-        this.selectedMatch = null
-        return false
-      }
-    }
-    ,
   }
 })
