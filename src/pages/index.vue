@@ -1,6 +1,6 @@
 <template>
-  <h1 class="mr-3">Classemement des équipes</h1>
-
+  <h1>Tournoi de jeux vidéo</h1>
+  <h2 class="mb-5">Classement des équipes</h2>
   <!-- Classement des équipes -->
   <table>
     <tr>

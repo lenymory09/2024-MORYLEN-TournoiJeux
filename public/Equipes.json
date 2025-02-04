@@ -1,74 +1,18 @@
 [
   {
     "id": "961cad28-8189-45a2-a34c-dd114cc0a0cb",
-    "name": "Aucune idée"
+    "name": "Equipe 1"
   },
   {
     "id": "6e5f9f2d-6000-48ea-ace0-d7ef7091d3ae",
-    "name": "Brique"
+    "name": "Equipe 2"
   },
   {
     "id": "4d98fc1a-f1d4-43cc-baeb-60fb3249a637",
-    "name": "Équipe 1"
+    "name": "Équipe 3"
   },
   {
     "id": "01c219b5-cfd9-44bb-b791-e2526b4523b2",
     "name": "Équipe 4"
-  },
-  {
-    "id": "34aa8a9a-93c9-4d20-a918-179b134f590e",
-    "name": "Hikaru Opinal"
-  },
-  {
-    "id": "866662a7-d29f-4a10-aef4-9db646c67a91",
-    "name": "Jérôme et les Ravalopins"
-  },
-  {
-    "id": "aa54db4e-6250-4245-b2e3-eabdb68508b6",
-    "name": "KolaTech"
-  },
-  {
-    "id": "200c2a4c-04ce-4ba3-bf98-35b8e4b2b426",
-    "name": "Les Autistic Players"
-  },
-  {
-    "id": "582a0e60-1923-462e-b632-c3dc5f7204b5",
-    "name": "Les Boulangers"
-  },
-  {
-    "id": "e0fbd499-eb3e-40fc-a0e9-0b5ef27e2a1a",
-    "name": "Les Opps"
-  },
-  {
-    "id": "9c1d4deb-94d6-4be6-96f1-b58e7cf939a5",
-    "name": "Les Rejetés"
-  },
-  {
-    "id": "46818d54-4eda-468b-9efd-056c1282b9c8",
-    "name": "Les Shock and Rawr"
-  },
-  {
-    "id": "e551462d-4efc-41e4-a621-7bbcc6242024",
-    "name": "Mewing Guys"
-  },
-  {
-    "id": "0b59f5b3-2ef4-4e3e-b4a2-290177599280",
-    "name": "Skibidi Snipers"
-  },
-  {
-    "id": "725e8389-f1ef-49cf-9bcd-713b9bea0af0",
-    "name": "Skill Issue"
-  },
-  {
-    "id": "f183b753-9e5c-4e15-84b4-95ad3575ec43",
-    "name": "Super Mario Profs"
-  },
-  {
-    "id": "a092a072-fb83-46f7-8403-0dc32d780d8a",
-    "name": "Team Rocket"
-  },
-  {
-    "id": "6846f786-4c9e-4b01-93f5-6953ecd5cc50",
-    "name": "XP Hunter"
   }
 ]
